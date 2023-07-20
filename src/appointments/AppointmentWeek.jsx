@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "react-query";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { AppointmentService } from "../_helpers";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
