@@ -34,10 +34,6 @@ function PrivateRoutes({ roles, children }) {
 function App() {
   customHistory.navigate = useNavigate();
   customHistory.location = useLocation();
-  // 
-
-  
-  
 
   return (
     <>
@@ -58,7 +54,7 @@ function App() {
 
         </Route>
 
-        <Route element={<PrivateRoutes roles='ROLE_ADMIN'/>}>
+        <Route element={<PrivateRoutes roles='ROLE_USER'/>}>
         <Route path="/" element={<HomePage />} />
         </Route>
 

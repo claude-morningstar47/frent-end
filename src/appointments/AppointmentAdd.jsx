@@ -95,7 +95,7 @@ export function AppointmentAdd({ closeModal }) {
                   timeFormat="HH:mm"
                   timeIntervals={30}
                   minTime={new Date().setHours(8, 0)}
-                  maxTime={new Date().setHours(19, 0)}
+                  maxTime={new Date().setHours(20, 0)}
                   dateFormat="PP à p"
                   locale={fr}
                   autoComplete="off"

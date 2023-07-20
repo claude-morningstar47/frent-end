@@ -11,7 +11,7 @@ export default function AdminPage() {
         <p className="text-x1 font-semibold leading-tight mb-4 flex justify-center">
           Welcome Admin
         </p>
-        <Link to='../users'>Manage users === </Link>
+        <Link to='../users'>Manage users ==== </Link>
         {/* <AppointmentWeek/> */}
         <div className="mt-3">
 
