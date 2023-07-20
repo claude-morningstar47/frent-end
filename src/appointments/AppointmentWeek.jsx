@@ -49,9 +49,25 @@ export const AppointmentWeek = () => {
   const calculateTotal = (sales) => {
     return sales.reduce((total, sale) => total + sale, 0);
   };
+  const [intervalId, setIntervalId] = useState(null);
+
 
   const handleWeek = (e) => {
-    setWeek(e.target.value);
+    // setWeek(e.target.value);
+    const newWeek = e.target.value;
+    setWeek(newWeek)
+
+    if(intervalId){
+      clearInterval(intervalId)
+    }
+
+    retrieveAppointments(newWeek)
+
+    const newIntervalId = setInterval(()=>{
+      retrieveAppointments(newWeek)
+    }, 360000)
+
+    setIntervalId(newIntervalId)
   };
 
   return (

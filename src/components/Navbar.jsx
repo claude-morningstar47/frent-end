@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../_store";
 import { Link } from "react-router-dom";
 
+
 export default function DefaultNavbar() {
   const dispatch = useDispatch();
   const isLogged = useSelector((state) => state.auth?.isLogged);
@@ -13,6 +14,9 @@ export default function DefaultNavbar() {
   const logout = () => dispatch(authActions.logout());
 
   if (!isLogged) return null;
+  
+  const hasRole = (role) => roles.includes(role);
+
 
   return (
     <Navbar fluid rounded>
@@ -26,13 +30,15 @@ export default function DefaultNavbar() {
           Linkuup Medical
         </span>
       </Navbar.Brand>
+
       <div className="flex md:order-2">
         <Dropdown
           inline
           label={
             <Avatar
               alt={`${user?.firstName}`}
-              img="https://flowbite.com/docs/images/people/profile-picture-1.jpg"
+              // img="https://flowbite.com/docs/images/people/profile-picture-1.jpg"
+              img="/images/bekanty.jpg"
               rounded
             />
           }
@@ -55,17 +61,21 @@ export default function DefaultNavbar() {
           Home
         </Navbar.Link>
 
-        {(roles.includes("ROLE_ADMIN") || roles.includes("ROLE_MODERATOR")) && (
+       
+        {(hasRole("ROLE_ADMIN") || hasRole("ROLE_MODERATOR")) && (
           <>
             <Navbar.Link as={Link} to="/manager">
               Manager
             </Navbar.Link>
 
-            <Navbar.Link as={Link} to="/admin">
-              Admin
-            </Navbar.Link>
+            {hasRole("ROLE_ADMIN") && (
+              <Navbar.Link as={Link} to="/admin">
+                Admin
+              </Navbar.Link>
+            )}
           </>
         )}
+
         <Navbar.Link as={Link} to="/about">
           About
         </Navbar.Link>
