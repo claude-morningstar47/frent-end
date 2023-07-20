@@ -41,13 +41,13 @@ const EmployeePerformanceTable = () => {
 
   // Données factices pour l'exemple
   const employees = [
-    { name: "Landry Tie", sales:    [4, 4, null, null, null] },
-    { name: "Ali Ouattara", sales:  [1, 2, null, null, null] },
-    { name: "Etienne Dago", sales:  [3, 1, null, null, null] },
-    { name: "Georges Tembo", sales: [1, 1, null, null, null] },
-    { name: "Balo Djegna", sales:   [1, null, null, null, null] },
-    { name: "Lopez Yao", sales:     [2, 2, null, null, null] },
-    { name: "Chantal Gbaly", sales: [1, 1, null, null, null] },
+    { name: "Landry Tie", sales:    [4, 5, 3, 0, 0] },
+    { name: "Ali Ouattara", sales:  [1, 2, 1, 0, 0] },
+    { name: "Etienne Dago", sales:  [3, 1, 5, 1, 0] },
+    { name: "Georges Tembo", sales: [1, 1, 1, 0, 0] },
+    { name: "Balo Djegna", sales:   [1, 1, 1, 0, 0] },
+    { name: "Lopez Yao", sales:     [2, 2, 3, 0, 0] },
+    { name: "Chantal Gbaly", sales: [1, 1, 0, 0, 0] },
   ];
 
   const calculateTotal = (sales) => {
@@ -62,12 +62,8 @@ const EmployeePerformanceTable = () => {
       <h2 className="text-xl font-bold mb-4">
         Performance des employés de la semaine
       </h2>
-      {/* Le reste de votre code JSX */}
 
-      <table
-        className="w-full border border-gray-900"
-        style={{ zIndex: "9999" }}
-      >
+      <table className="w-full border border-gray-900" style={{ zIndex: "9999" }}>
         <thead>
           <tr>
             <th className="px-4 py-2 font-bold">Agent</th>
@@ -86,18 +82,8 @@ const EmployeePerformanceTable = () => {
                 <p className="text-lg font-bold">{employee.name} </p>
               </td>
               {employee.sales.map((sale, dayIndex) => (
-                <td
-                  key={dayIndex}
-                  className={`border border-gray-900 px-4 py-2 ${
-                    sale > 2 ? "bg-green-200" : "bg-yellow-200"
-                  }`}
-                >
-                  {/* <p className="font-bold  text-2xl text-center">{sale} </p>  */}
-                  <p
-                    className={`font-bold text-2xl text-center ${
-                      sale === 0 ? "text-red-500" : ""
-                    }`}
-                  >
+                <td key={dayIndex} className={`border border-gray-900 px-4 py-2 ${ sale > 2 ? "bg-green-200" : "bg-yellow-200"}`}>
+                  <p className={`font-bold text-2xl text-center ${ sale === 0 ? "text-red-500" : "" }`}>
                     {sale}
                   </p>
                 </td>
@@ -116,34 +102,16 @@ const EmployeePerformanceTable = () => {
               Total
             </td>
             {employees[0].sales.map((_, dayIndex) => (
-              <td
-                key={dayIndex}
-                className={`border border-gray-900 px-4 py-2 font-bold ${
-                  employees.reduce(
-                    (total, employee) => total + employee.sales[dayIndex],
-                    0
-                  ) > 14
-                    ? "bg-green-200"
-                    : "bg-yellow-200"
-                }`}
-              >
-                <p className="font-bold text-2xl text-red-500 font-bold text-center">
-                  {" "}
-                  {employees.reduce(
-                    (total, employee) => total + employee.sales[dayIndex],
-                    0
-                  )}
+              <td key={dayIndex} className={`border border-gray-900 px-4 py-2 font-bold ${employees.reduce(
+                    (total, employee) => total + employee.sales[dayIndex], 0) > 14 ? "bg-green-200" : "bg-yellow-200"}`}>
+                <p className="font-bold text-2xl text-red-500 font-bold text-center">                 
+                  {employees.reduce((total, employee) => total + employee.sales[dayIndex], 0 )}
                 </p>
               </td>
             ))}
             <td className="border border-gray-900 px-4 py-2 ">
               <p className="font-bold text-2xl text-red-500 font-bold text-center">
-                {calculateTotal(
-                  employees.reduce(
-                    (sales, employee) => sales.concat(employee.sales),
-                    []
-                  )
-                )}
+                {calculateTotal(employees.reduce( (sales, employee) => sales.concat(employee.sales), [] ))}
               </p>
             </td>
           </tr>

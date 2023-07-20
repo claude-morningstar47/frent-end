@@ -16,6 +16,7 @@ import AboutPage from "./pages/About";
 import ManagerPage from "./pages/Manager";
 import UnauthorizedPage from "./pages/Unauthorized";
 import { UsersLayout } from "./users";
+import AppointmentEdit from "./appointments/AppointmentEdit";
 
 function PrivateRoutes({ roles, children }) {
   const isLogged = useSelector((state) => state.auth?.isLogged);
@@ -53,6 +54,7 @@ function App() {
         <Route element={<PrivateRoutes roles='ROLE_ADMIN'/>}>
         <Route path="/admin" element={<AdminPage />} />
         <Route path="users/*" element={<UsersLayout />} />
+        <Route path="/appointments/edit/:id" element={<AppointmentEdit />}/>
 
         </Route>
 

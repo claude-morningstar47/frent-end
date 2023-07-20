@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Label,
@@ -8,7 +8,7 @@ import {
   TextInput,
   Textarea,
 } from "flowbite-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 
 import fr from "date-fns/locale/fr";
@@ -16,8 +16,11 @@ import fr from "date-fns/locale/fr";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AppointmentService } from "../_helpers";
+import { alertActions } from "../_store";
 
 export function AppointmentAdd({ closeModal }) {
+
+  const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth?.user);
 
   const { register, handleSubmit, formState, watch, reset } = useForm();
@@ -28,8 +31,15 @@ export function AppointmentAdd({ closeModal }) {
 
     await AppointmentService.createAppointment(userId, data)
       .then((response) => response.data)
+      .then(
+        dispatch(alertActions.success("Add Success")),
+        setTimeout(() => {
+          dispatch(alertActions.clear());
+        }, 2000),
+      )
       .catch((err) => {
         console.log(err);
+        dispatch(alertActions.error(err));
       });
 
     closeModal();

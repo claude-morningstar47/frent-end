@@ -1,8 +1,8 @@
 import { instanceHttp } from "./instanceAxios";
 
-const getAllAppointments = (date, page, limit) => {
+const getAllAppointments = (startDate, endDate,page, limit) => {
   return instanceHttp.get(
-    `appointments?date=${date}&page=${page}&limit=${limit}`
+    `appointments?startDate=${startDate}&endDate=${endDate}&page=${page}&limit=${limit}`
   );
 };
 const getAppointmentById = (id) => {

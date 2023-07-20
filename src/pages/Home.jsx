@@ -8,12 +8,10 @@ export default function HomePage() {
   const [refreshList, setRefreshList] = useState(false);
 
   const handleClose = () => {
-    // setRefreshList(prevState => !prevState);
-    setRefreshList(true);
-
+    setRefreshList((prevState) => !prevState);
+    // setRefreshList(true);
     setOpenModal(false);
   };
-
 
   return (
     <>
@@ -36,7 +34,7 @@ export default function HomePage() {
         </Modal.Body>
       </Modal>
 
-      <div 
+      <div
       // className="w-full flex justify-center"
       >
         <AppointmentList refreshList={refreshList} />

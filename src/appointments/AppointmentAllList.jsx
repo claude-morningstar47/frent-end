@@ -1,82 +1,257 @@
-import { useQuery } from "react-query";
-import { instance } from "../_helpers";
-import { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import { Button, Spinner, Table } from "flowbite-react";
+import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 
-const useFetchAppointments = () => {
-  const fetchAppointments = useCallback((page, limit, startDate, endDate) => {
-    return instance
-      .get(
-        `/appointments/?startDate=${startDate}&endDate=${endDate}&page=${page}&limit=${limit}`
-      )
-      .then((response) => response.data);
-  }, []);
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
 
-  return fetchAppointments;
-};
+import { DateRangePicker } from "react-date-range";
+import { formatSelectedDate } from "../utils/dateUtils";
+import { downloadAsCSV } from "../utils/csvUtils";
+import { AppointmentService } from "../_helpers";
+import { useQuery, useQueryClient } from "react-query";
 
-export const AppointmentAllList = () => {
-  const [page, setPage] = useState(10);
-  const [limit, setLimit] = useState(10);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+const AppointmentAllList = () => {
+  const downloadRef = useRef(null);
+  const queryClient = useQueryClient();
 
-  const fetchAppointments = useFetchAppointments();
+  const [filterAgent, setFilterAgent] = useState("");
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [titleDate, setTitleDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "date",
+    },
+  ]);
+
+  const page = 1;
+  const limit = 100;
+
+  // Fetch appointments
+  const retrieveAppointments = async (startDate, endDate, page, limit) => {
+    try {
+      const response = await AppointmentService.getAllAppointments(
+        startDate,
+        endDate,
+        page,
+        limit
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  // Query appointments
+  const { data, isLoading, isError, error } = useQuery(
+    [
+      "Allappointments",
+      selectedDate[0].startDate,
+      selectedDate[0].endDate,
+      page,
+      limit,
+    ],
+    () =>
+      retrieveAppointments(
+        formatSelectedDate(selectedDate[0].startDate),
+        formatSelectedDate(selectedDate[0].endDate),
+        page,
+        limit
+      ),
+    { cacheTime: 6000 }
+  );
 
   useEffect(() => {
-    // Vérifiez si les valeurs ont changé avant de déclencher l'appel à l'API
-    if (page && limit && startDate && endDate) {
-      fetchAppointments(page, limit, startDate, endDate);
+    if (isError && error.response && error.response.status === 201) {
+      queryClient.invalidateQueries(["Allappointments", selectedDate]);
     }
-  }, [page, limit, startDate, endDate, fetchAppointments]);
+  }, [isError, error, queryClient, selectedDate]);
 
-  const { data, error, isLoading, isError, isFetching, isPreviousData } =
-    useQuery(
-      ["appointments", page, limit, startDate, endDate],
-      () => fetchAppointments(page, limit, startDate, endDate),{
-        cacheTime: 60000
+  // Appointments data
+  const appointments = data?.appointments || [];
+
+  useEffect(() => {
+    if (selectedDate.length > 0) {
+      const startDate = formatSelectedDate(selectedDate[0].startDate);
+      const endDate = formatSelectedDate(selectedDate[0].endDate);
+
+      // We can remove this redundant API call
+      // retrieveAppointments(startDate, endDate, page, limit);
+      setTitleDate(endDate);
+    }
+  }, [selectedDate]);
+
+  const handleDateChange = (ranges) => {
+    setSelectedDate([ranges.date]);
+  };
+
+  const handleButtonClick = () => {
+    setShowDatePicker(true);
+  };
+
+  const handleDatePickerClose = () => {
+    setShowDatePicker(false);
+  };
+
+  const handleAgentFilterChange = (e) => {
+    setFilterAgent(e.target.value);
+  };
+
+  const filteredAppointments = useMemo(() => {
+    return appointments?.docs?.filter((item) => {
+      if (
+        filterAgent &&
+        !item.userId?.firstName
+          .toLowerCase()
+          .includes(filterAgent.toLowerCase())
+      ) {
+        return false;
       }
-    );
+      return true;
+    });
+  }, [appointments, filterAgent]);
 
-    const { appointments, totalPages, hasNextPage, hasPrevPage } = data || [];
-//   const appointments = data?.appointments;
-    console.log(appointments.docs);
-  //   console.log(appointments.docs);
+  // Render your UI with the optimized data
+  // ...
 
   return (
-    <div className="bg-gray-100">
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : isError ? (
-        <div>Error: {error.message}</div>
-      ) : (
+    <>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div>
-          {appointments?.docs?.map((item) => (
-            <p key={item._id}>{item.name}</p>
-          ))}
+          <Button color="gray" size="xs" onClick={handleButtonClick}>
+            Select a date range
+          </Button>
+          {showDatePicker && (
+            <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+              <div className="modal modal-open">
+                <div className="modal-box bg-white p-4 rounded-lg shadow-lg">
+                  <div className="modal-header flex justify-end">
+                    <Button color="gray" onClick={handleDatePickerClose}>
+                      X
+                    </Button>
+                  </div>
+                  <div className="modal-content mt-1">
+                    <DateRangePicker
+                      ranges={selectedDate}
+                      onChange={handleDateChange}
+                      showSelectionPreview={true}
+                      moveRangeOnFirstSelection={false}
+                      renderStaticRangeLabel={({ startDate, endDate }) =>
+                        `${formatSelectedDate(
+                          startDate
+                        )} - ${formatSelectedDate(endDate)}`
+                      }
+                    />
+                    <div className="mt-2 flex justify-end">
+                      <Button
+                        size="xs"
+                        color="gray"
+                        onClick={handleDatePickerClose}
+                      >
+                        Fermer
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-      <span>Current Page: {page}</span>
 
-      <button
-        className="bg-blue-700 text-white px-4 py-2 rounded"
-        onClick={() => setPage((old) => Math.max(old - 1, 1))}
-        disabled={!hasPrevPage}
-      >
-        Previous Page
-      </button>
-      <button
-        className="bg-blue-700 text-white px-4 py-2 rounded"
-        onClick={() => {
-          if (!isPreviousData && hasNextPage) {
-            setPage((old) => old + 1);
-          }
-        }}
-        disabled={isPreviousData || !hasNextPage}
-      >
-        Next Page
-      </button>
+        <Table hoverable className="mt-3">
+          <Table.Head>
+            <Table.HeadCell>#</Table.HeadCell>
+            <Table.HeadCell>Agent</Table.HeadCell>
+            <Table.HeadCell>Date</Table.HeadCell>
+            <Table.HeadCell>Full Name</Table.HeadCell>
+            <Table.HeadCell>Phone</Table.HeadCell>
+            <Table.HeadCell>Address</Table.HeadCell>
+            <Table.HeadCell>Scheduling Date</Table.HeadCell>
+            <Table.HeadCell>Sales Representative</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>
+              <span className="sr-only">Edit</span>
+            </Table.HeadCell>
+          </Table.Head>
 
-      {isFetching ? <span>Loading...</span> : null}
-    </div>
+          <Table.Body className="divide-y">
+            {filteredAppointments
+              ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .map((appointment, index) => (
+                <Table.Row
+                  key={appointment._id}
+                  className="bg-white text-xs dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <Table.Cell>{index + 1}</Table.Cell>
+                  <Table.Cell
+                    style={{ whiteSpace: "nowrap", maxWidth: "2px" }}
+                    className="whitespace-no-wrap front-medium text-gray-900 dark:text-white"
+                  >
+                    {appointment.userId?.firstName}
+                  </Table.Cell>
+
+                  <Table.Cell style={{ whiteSpace: "nowrap", maxWidth: "2px" }}>
+                    {dayjs(appointment.createdAt).format("DD/MM")}
+                  </Table.Cell>
+                  <Table.Cell
+                    className="whitespace-no-wrap front-medium text-gray-900 dark:text-white px-3 py-3 sm:px-4 overflow-auto"
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    {appointment.name.toUpperCase()}
+                  </Table.Cell>
+                  <Table.Cell
+                    className="px-3 py-3 sm:px-4 overflow-auto"
+                    style={{ whiteSpace: "nowrap", maxWidth: "120px" }}
+                  >
+                    {appointment.phone_1} / {appointment.phone_2}
+                  </Table.Cell>
+                  <Table.Cell
+                    className="px-3 py-3 sm:px-6  overflow-auto"
+                    style={{ whiteSpace: "nowrap", maxWidth: "120px" }}
+                  >
+                    {appointment.address.toLowerCase()}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {dayjs(appointment.date).format("DD/MM/YY, HH:mm")}
+                  </Table.Cell>
+                  <Table.Cell
+                    className="px-3 py-3 sm:px-6  overflow-auto"
+                    style={{ whiteSpace: "nowrap", maxWidth: "100px" }}
+                  >
+                    {appointment.commercial}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                      <span
+                        aria-hidden
+                        className="absolute text-xs inset-0 bg-green-200 opacity-50 rounded-full"
+                      ></span>
+                      <span className="relative text-xs">
+                        {appointment.status}
+                      </span>
+                    </span>
+                  </Table.Cell>
+                  <Table.Cell className="fornt-medium text-cyan-600 hover:underline dark:text-cyan-500">
+                    <Link to={`../appointments/edit/${appointment._id}`}>
+                      Edit
+                    </Link>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+          </Table.Body>
+        </Table>
+        {isLoading && (
+          <div className="text-center">
+            <Spinner aria-label="Default status example" size="xl" />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
+
+export { AppointmentAllList };
