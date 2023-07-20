@@ -203,12 +203,13 @@ const AppointmentAllList = () => {
                   >
                     {appointment.name.toUpperCase()}
                   </Table.Cell>
-                  <Table.Cell
-                    className="px-3 py-3 sm:px-4 overflow-auto"
-                    style={{ whiteSpace: "nowrap", maxWidth: "120px" }}
-                  >
-                    {appointment.phone_1} / {appointment.phone_2}
-                  </Table.Cell>
+
+
+<Table.Cell className="px-3 py-3 sm:px-4 overflow-auto" style={{ whiteSpace: "nowrap", maxWidth: "120px" }}>
+  {appointment.phone_1 && appointment.phone_2 ? `${appointment.phone_1} / ${appointment.phone_2}` : (appointment.phone_1 || appointment.phone_2)}
+</Table.Cell>
+
+
                   <Table.Cell
                     className="px-3 py-3 sm:px-6  overflow-auto"
                     style={{ whiteSpace: "nowrap", maxWidth: "120px" }}

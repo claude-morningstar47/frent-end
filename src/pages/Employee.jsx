@@ -41,7 +41,7 @@ const EmployeePerformanceTable = () => {
 
   // Données factices pour l'exemple
   const employees = [
-    { name: "Landry Tie", sales:    [4, 5, 3, 0, 0] },
+    { name: "Landry Tie", sales:    [4, 5, 3, 1, 0] },
     { name: "Ali Ouattara", sales:  [1, 2, 1, 0, 0] },
     { name: "Etienne Dago", sales:  [3, 1, 5, 1, 0] },
     { name: "Georges Tembo", sales: [1, 1, 1, 1, 0] },
