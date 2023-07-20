@@ -65,7 +65,7 @@ export const AppointmentWeek = () => {
 
     const newIntervalId = setInterval(()=>{
       retrieveAppointments(newWeek)
-    }, 360000)
+    }, 1800000)
 
     setIntervalId(newIntervalId)
   };
@@ -131,7 +131,7 @@ export const AppointmentWeek = () => {
 
                   {filteredEmployees[0].week?.map((_, dayIndex) => (
                     <td key={dayIndex} className={`border border-gray-900 px-4 py-2 font-bold ${
-                        employees.reduce( (total, employee) => total + employee.week[dayIndex], 0 ) > 14 ? "bg-green-200" : "bg-yellow-200" }`}>
+                        filteredEmployees.reduce( (total, employee) => total + employee.week[dayIndex], 0 ) > 14 ? "bg-green-200" : "bg-yellow-200" }`}>
                       <p className="font-bold text-2xl font-bold text-center">                       
                         {filteredEmployees?.reduce((total, employee) => total + employee.week[dayIndex], 0 )}
                       </p>
