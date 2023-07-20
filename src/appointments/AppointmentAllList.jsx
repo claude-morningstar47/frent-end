@@ -76,7 +76,7 @@ const AppointmentAllList = () => {
 
   useEffect(() => {
     if (selectedDate.length > 0) {
-      const startDate = formatSelectedDate(selectedDate[0].startDate);
+      // const startDate = formatSelectedDate(selectedDate[0].startDate);
       const endDate = formatSelectedDate(selectedDate[0].endDate);
 
       // We can remove this redundant API call
@@ -113,7 +113,7 @@ const AppointmentAllList = () => {
       }
       return true;
     });
-  }, [appointments, filterAgent]);
+  }, [appointments?.docs, filterAgent]);
 
   // Render your UI with the optimized data
   // ...

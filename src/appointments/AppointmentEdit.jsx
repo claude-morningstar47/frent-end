@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {  useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import { AppointmentService, customHistory } from "../_helpers";
@@ -75,7 +75,7 @@ const AppointmentEdit = () => {
   }, [isError, error, queryClient, appointmentId]);
 
   // Appointments data
-  const appointment = data?.appointment || {};
+  const appointment = useMemo(()=> data?.appointment || {}, [data]);
 
   useEffect(() => {
     // Mettre à jour les champs du formulaire avec les données du rendez-vous
