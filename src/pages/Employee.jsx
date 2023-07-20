@@ -1,43 +1,7 @@
-import { Button } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const EmployeePerformanceTable = () => {
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const toggleFullScreen = () => {
-    if (!isFullScreen) {
-      const element = document.documentElement;
-      if (element.requestFullscreen) {
-        element.requestFullscreen();
-      } else if (element.mozRequestFullScreen) {
-        element.mozRequestFullScreen();
-      } else if (element.webkitRequestFullscreen) {
-        element.webkitRequestFullscreen();
-      } else if (element.msRequestFullscreen) {
-        element.msRequestFullscreen();
-      }
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
-    }
-  };
-  useEffect(() => {
-    const handleFullScreenChange = () => {
-      setIsFullScreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener("fullscreenchange", handleFullScreenChange);
-
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFullScreenChange);
-    };
-  }, []);
+  
 
   // Données factices pour l'exemple
   const employees = [
@@ -56,9 +20,7 @@ const EmployeePerformanceTable = () => {
 
   return (
     <div className="p-4">
-      <Button onClick={toggleFullScreen}>
-        {isFullScreen ? "Quitter" : "Activer le mode plein écran"}
-      </Button>
+      
       <h2 className="text-xl font-bold mb-4">
         Performance des employés de la semaine
       </h2>

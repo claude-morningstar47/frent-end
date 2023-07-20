@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { Button, Spinner, Table } from "flowbite-react";
+import { Button, Spinner, Table, TextInput } from "flowbite-react";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 
@@ -120,7 +120,10 @@ const AppointmentAllList = () => {
 
   return (
     <>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      {/* <div className="relative overflow-x-auto shadow-md sm:rounded-lg"> */}
+      <div>
+      <div className="flex items-center justify-between pb-4">
+
         <div>
           <Button color="gray" size="xs" onClick={handleButtonClick}>
             Select a date range
@@ -161,6 +164,46 @@ const AppointmentAllList = () => {
             </div>
           )}
         </div>
+
+
+        <Button
+            type="button"
+            size="xs"
+            color="light"
+            ref={downloadRef}
+            onClick={() => downloadAsCSV(appointments, titleDate)}
+          >
+            download as CSV
+          </Button>
+
+          <div className="text-gray-600">
+            Count: {appointments?.totalDocs}
+          </div>
+
+          <div className="relative">
+            <label htmlFor="search" className="sr-only">
+              Search
+            </label>
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg
+                viewBox="0 0 24 24"
+                className="h-4 w-4 fill-current text-gray-500"
+              >
+                <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
+              </svg>
+            </div>
+            <TextInput
+              id="search"
+              type="text"
+              className="block p-1 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Filter by agent"
+              autoComplete="off"
+              value={filterAgent}
+              onChange={handleAgentFilterChange}
+            />
+          </div>
+          </div>
+
 
         <Table hoverable className="mt-3">
           <Table.Head>

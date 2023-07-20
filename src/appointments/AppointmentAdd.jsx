@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
   Label,
@@ -17,14 +17,17 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AppointmentService } from "../_helpers";
 import { alertActions } from "../_store";
+import { useQueryClient } from "react-query";
 
-export function AppointmentAdd({ closeModal }) {
+export function AppointmentAdd({ closeModal , dateWeek}) {
 
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth?.user);
 
   const { register, handleSubmit, formState, watch, reset } = useForm();
   const { isSubmitting } = formState;
+
+const queryClient = useQueryClient()
 
   const onSubmit = async (data) => {
     const userId = authUser?.id;
@@ -33,6 +36,8 @@ export function AppointmentAdd({ closeModal }) {
       .then((response) => response.data)
       .then(
         dispatch(alertActions.success("Add Success")),
+         // Invalider la requête "appointments" dans le composant AppointmentWeek
+         queryClient.invalidateQueries(["appointments", dateWeek]),
         setTimeout(() => {
           dispatch(alertActions.clear());
         }, 2000),

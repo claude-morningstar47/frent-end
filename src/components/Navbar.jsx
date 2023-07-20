@@ -32,7 +32,7 @@ export default function DefaultNavbar() {
           label={
             <Avatar
               alt={`${user?.firstName}`}
-              img="https://flowbite.com/docs/images/people/profile-picture-4.jpg"
+              img="https://flowbite.com/docs/images/people/profile-picture-1.jpg"
               rounded
             />
           }
