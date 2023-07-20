@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "react-query";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AppointmentService } from "../_helpers";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
@@ -27,7 +27,7 @@ export const AppointmentWeek = () => {
 
   const { data, error, isLoading, isError, isFetching } = useQuery(
     ["appointments", week],
-    () => retrieveAppointments(week),
+    () => retrieveAppointments(week)
     // { cacheTime: 60000 }
   );
 
@@ -39,40 +39,31 @@ export const AppointmentWeek = () => {
 
   const { employees } = data || [];
 
-  const filteredEmployees =
-    employees?.map((employee) => ({
-      ...employee,
-      week: employee.week?.slice(1, 6)
-    }));
+  const filteredEmployees = employees?.map((employee) => ({
+    ...employee,
+    week: employee.week?.slice(1, 6),
+  }));
 
   // Afficher le résultat
   const calculateTotal = (sales) => {
     return sales.reduce((total, sale) => total + sale, 0);
   };
-  const [intervalId, setIntervalId] = useState(null);
-
 
   const handleWeek = (e) => {
     // setWeek(e.target.value);
     const newWeek = e.target.value;
-    setWeek(newWeek)
-
-    if(intervalId){
-      clearInterval(intervalId)
-    }
-
-    retrieveAppointments(newWeek)
-
-    const newIntervalId = setInterval(()=>{
-      retrieveAppointments(newWeek)
-    }, 1800000)
-
-    setIntervalId(newIntervalId)
+    setWeek(newWeek);
   };
 
   return (
     <div className="bg-gray-100 p-4">
-      <input type="week" name="week" id="week" value={week} onChange={handleWeek}/>
+      <input
+        type="week"
+        name="week"
+        id="week"
+        value={week}
+        onChange={handleWeek}
+      />
 
       {isLoading ? (
         <div>Loading...</div>
@@ -84,7 +75,10 @@ export const AppointmentWeek = () => {
             Performance des employés de la semaine
           </h2>
 
-          <table className="w-full border border-gray-900" style={{ zIndex: "9999" }}>
+          <table
+            className="w-full border border-gray-900"
+            style={{ zIndex: "9999" }}
+          >
             <thead>
               <tr>
                 <th className="px-4 py-2 font-bold">Agent</th>
@@ -107,18 +101,59 @@ export const AppointmentWeek = () => {
                     <p className="text-lg font-bold">{employee.name} </p>
                   </td>
                   {employee?.week?.map((sale, dayIndex) => (
-                    <td key={dayIndex} className={`border border-gray-900 px-4 py-2 ${ sale > 2 ? "bg-green-200" : "bg-yellow-200"}`}>
+                    <td
+                      key={dayIndex}
+                      className={`border border-gray-900 px-4 py-2 ${
+                        sale > 2 ? "bg-green-200" : "bg-yellow-200"
+                      }`}
+                    >
                       {/* <p className="font-bold  text-2xl text-center">{sale} </p>  */}
-                      <p className={`font-bold text-2xl text-center ${ sale === 0 ? "text-red-500" : ""}`}>
+                      <p
+                        className={`font-bold text-2xl text-center ${
+                          sale === 0 ? "text-red-500" : ""
+                        }`}
+                      >
                         {sale}
                       </p>
                     </td>
                   ))}
-                  <td className="border px-4 border-gray-900 py-2 font-bold">
+
+                  <td
+                    className={`border px-4 border-gray-900 py-2 font-bold ${
+                      calculateTotal(employee?.week) > 14 ? "bg-blue-200" : ""
+                    }`}
+                  >
+                    <div className="flex flex-col items-center">
+                    {calculateTotal(employee?.week) > 14 && (
+                        <span className="badge-badge-star">★</span>
+                      )}
+                      <p className="font-bold text-2xl text-center">
+                        {calculateTotal(employee?.week)}
+                      </p>
+
+                      
+                    </div>
+                  </td>
+
+                  {/* <td
+                    className={`border px-4 border-gray-900 py-2 font-bold ${
+                      calculateTotal(employee?.week) > 14
+                        ? "bg-blue-200"
+                        : ""
+                    }`}
+                  >
+                    <p className="font-bold text-2xl text-center">
+                      {calculateTotal(employee?.week)}
+                    </p>
+                    {calculateTotal(employee?.week) > 14 && (
+                      <span className="badge-badge-star">★</span>
+                    )}
+                  </td> */}
+                  {/* <td className="border px-4 border-gray-900 py-2 font-bold">
                     <p className="font-bold  text-2xl text-center ">
                       {calculateTotal(employee?.week)}
                     </p>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
@@ -130,16 +165,33 @@ export const AppointmentWeek = () => {
                   </td>
 
                   {filteredEmployees[0].week?.map((_, dayIndex) => (
-                    <td key={dayIndex} className={`border border-gray-900 px-4 py-2 font-bold ${
-                        filteredEmployees.reduce( (total, employee) => total + employee.week[dayIndex], 0 ) > 14 ? "bg-green-200" : "bg-yellow-200" }`}>
-                      <p className="font-bold text-2xl font-bold text-center">                       
-                        {filteredEmployees?.reduce((total, employee) => total + employee.week[dayIndex], 0 )}
+                    <td
+                      key={dayIndex}
+                      className={`border border-gray-900 px-4 py-2 font-bold ${
+                        filteredEmployees.reduce(
+                          (total, employee) => total + employee.week[dayIndex],
+                          0
+                        ) > 14
+                          ? "bg-green-200"
+                          : "bg-yellow-200"
+                      }`}
+                    >
+                      <p className="font-bold text-2xl font-bold text-center">
+                        {filteredEmployees?.reduce(
+                          (total, employee) => total + employee.week[dayIndex],
+                          0
+                        )}
                       </p>
                     </td>
                   ))}
                   <td className="border border-gray-900 px-4 py-2 ">
                     <p className="font-bold text-2xl text-red-500 font-bold text-center">
-                      {calculateTotal( employees?.reduce((sales, employee) => sales.concat(employee.week), []))}
+                      {calculateTotal(
+                        employees?.reduce(
+                          (sales, employee) => sales.concat(employee.week),
+                          []
+                        )
+                      )}
                     </p>
                   </td>
                 </tr>
