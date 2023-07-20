@@ -123,15 +123,13 @@ export const AppointmentWeek = () => {
                       calculateTotal(employee?.week) > 14 ? "bg-blue-200" : ""
                     }`}
                   >
-                    <div className="flex flex-col items-center">
-                    {calculateTotal(employee?.week) > 14 && (
-                        <span className="badge-badge-star">★</span>
+                    <div className="flex flex-row-reverse  justify-center items-center">
+                      {calculateTotal(employee?.week) > 14 && (
+                        <span className="badge-badge-star ml-1">★</span>
                       )}
                       <p className="font-bold text-2xl text-center">
                         {calculateTotal(employee?.week)}
                       </p>
-
-                      
                     </div>
                   </td>
 
