@@ -57,16 +57,18 @@ export const AppointmentWeek = () => {
 
   return (
     <div className="bg-gray-100 p-4">
-      <div className="flex">
-      <input
-        type="week"
-        name="week"
-        id="week"
-        value={week}
-        onChange={handleWeek}
-      />
-<Clock/>
-</div>
+      <div className="grid grid-cols-6 gap-6">
+        <input
+          type="week"
+          name="week"
+          id="week"
+          value={week}
+          onChange={handleWeek}
+          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+        />
+
+        <Clock />
+      </div>
       {isLoading ? (
         <div>Loading...</div>
       ) : isError ? (
