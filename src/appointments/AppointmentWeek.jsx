@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { AppointmentService } from "../_helpers";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
+import Clock from "../components/Clock";
 dayjs.extend(isoWeek);
 
 export const AppointmentWeek = () => {
@@ -37,13 +38,12 @@ export const AppointmentWeek = () => {
     }
   }, [isError, error, queryClient, week]);
 
-  const { employees } = data || [];
+  const { employees = [] } = data ?? {};
 
-  const filteredEmployees = employees?.map((employee) => ({
+  const filteredEmployees = employees?.map(({ week, ...employee }) => ({
     ...employee,
-    week: employee.week?.slice(1, 6),
+    week: week?.slice(1, 6),
   }));
-
   // Afficher le résultat
   const calculateTotal = (sales) => {
     return sales.reduce((total, sale) => total + sale, 0);
@@ -57,6 +57,7 @@ export const AppointmentWeek = () => {
 
   return (
     <div className="bg-gray-100 p-4">
+      <div className="flex">
       <input
         type="week"
         name="week"
@@ -64,7 +65,8 @@ export const AppointmentWeek = () => {
         value={week}
         onChange={handleWeek}
       />
-
+<Clock/>
+</div>
       {isLoading ? (
         <div>Loading...</div>
       ) : isError ? (

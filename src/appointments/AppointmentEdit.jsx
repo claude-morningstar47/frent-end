@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import { AppointmentService, customHistory } from "../_helpers";
 import { useQuery, useQueryClient } from "react-query";
@@ -10,7 +10,7 @@ const AppointmentEdit = () => {
   const queryClient = useQueryClient();
 
   const [appointmentData, setAppointmentData] = useState({
-    date: dayjs().format("YYYY-MM-DDTHH:mm"), // Use "T" instead of space for datetime-local input
+    date: dayjs().format("YYYY-MM-DDTHH:mm"),
     name: "",
     status: "",
     comment: "",
@@ -20,7 +20,6 @@ const AppointmentEdit = () => {
     phone_2: "",
   });
 
-  // Fetch appointment
   const retrieveAppointment = async (appointmentId) => {
     try {
       const response = await AppointmentService.getAppointmentById(
@@ -33,7 +32,6 @@ const AppointmentEdit = () => {
     }
   };
 
-  // Update appointment
   const updateAppointment = async (appointmentId, data) => {
     try {
       const response = await AppointmentService.updateAppointment(
@@ -47,13 +45,13 @@ const AppointmentEdit = () => {
       throw error;
     }
   };
-  // Update appointment
+
   const deleteAppointment = async (appointmentId) => {
     try {
       const response = await AppointmentService.deleteAppointment(
         appointmentId
       );
-      customHistory.navigate(-1)
+      customHistory.navigate(-1);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -61,7 +59,6 @@ const AppointmentEdit = () => {
     }
   };
 
-  // Query appointments
   const { data, isLoading, isError, error } = useQuery(
     ["appointment", appointmentId],
     () => retrieveAppointment(appointmentId),
@@ -74,16 +71,15 @@ const AppointmentEdit = () => {
     }
   }, [isError, error, queryClient, appointmentId]);
 
-  // Appointments data
-  const appointment = useMemo(()=> data?.appointment || {}, [data]);
+  const appointment = useMemo(() => data?.appointment || {}, [data]);
 
   useEffect(() => {
-    // Mettre à jour les champs du formulaire avec les données du rendez-vous
     if (appointment) {
-      setAppointmentData({
+      setAppointmentData((prevState) => ({
+        ...prevState,
         ...appointment,
-        date: dayjs(appointment.date).format("YYYY-MM-DDTHH:mm")
-      });
+        date: dayjs(appointment.date).format("YYYY-MM-DDTHH:mm"),
+      }));
     }
   }, [appointment]);
 
@@ -97,17 +93,14 @@ const AppointmentEdit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // update appointment
     updateAppointment(appointmentId, appointmentData);
   };
 
   const handleDelete = () => {
-    // Add logic for "Supprimé" (Delete) button action if needed
     deleteAppointment(appointmentId);
   };
 
   const handleCancel = () => {
-    // Add logic for "Annulé" (Cancel) button action if needed
     customHistory.navigate("/admin");
   };
 
@@ -125,29 +118,27 @@ const AppointmentEdit = () => {
         <p className="text-sm">Rdv pris par {appointment?.userId?.firstName}</p>
       </div>
 
-      <div className="p-6 space-y-6">
-        <form>
+      {/* <div className */}
+      <div className="p-5">
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-6 gap-6">
             <div className="col-span-6 sm:col-span-3">
               <label
                 htmlFor="status"
-                className="text-sm font-medium text-gray-900 block mb-2"
+                className="block text-sm font-medium text-gray-700"
               >
                 Status
               </label>
               <select
-                type="text"
-                name="status"
                 id="status"
-                autoComplete="off"
+                name="status"
                 value={appointmentData.status}
                 onChange={handleInputChange}
-                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                required
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               >
-                <option value="">Select Status</option>
-                <option value="pending">En Attente</option>
+                <option value="">Select status</option>
                 <option value="confirmed">Confirmé</option>
+                <option value="pending">En Attente</option>
                 <option value="cancelled">Annulé</option>
                 <option value="not-interested">Pas Intéressé</option>
                 <option value="to-be-reminded">A Rappeler</option>
@@ -158,10 +149,11 @@ const AppointmentEdit = () => {
             <div className="col-span-6 sm:col-span-3">
               <label
                 htmlFor="commercial"
-                className="text-sm font-medium text-gray-900 block mb-2"
+                className="block text-sm font-medium text-gray-700"
               >
                 Sales Representative
               </label>
+
               <select
                 type="text"
                 name="commercial"
@@ -169,7 +161,7 @@ const AppointmentEdit = () => {
                 autoComplete="off"
                 value={appointmentData.commercial}
                 onChange={handleInputChange}
-                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                 required
               >
                 <option value="">Select Sales Representative</option>
@@ -182,137 +174,116 @@ const AppointmentEdit = () => {
                 <option value="Simon Cadenne">Simon Cadenne</option>
               </select>
             </div>
-            <div className="col-span-6 sm:col-span-3">
-              <label
-                htmlFor="name"
-                className="text-sm font-medium text-gray-900 block mb-2"
-              >
-                Appointment Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                autoComplete="off"
-                value={appointmentData.name}
-                onChange={handleInputChange}
-                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                required
-              />
-            </div>
-            <div className="col-span-6 sm:col-span-3">
-              <label
-                htmlFor="date"
-                className="text-sm font-medium text-gray-900 block mb-2"
-              >
-                Appointment Date
-              </label>
-              <input
-                type="datetime-local"
-                name="date"
-                id="date"
-                autoComplete="off"
-                value={appointmentData.date}
-                onChange={handleInputChange}
-                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                required
-              />
-            </div>
+          </div>
+
+          <div className="col-span-6 sm:col-span-3">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={appointmentData.name}
+              onChange={handleInputChange}
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            />
+          </div>
+
+          <div className="grid grid-cols-6 gap-6">
             <div className="col-span-6 sm:col-span-3">
               <label
                 htmlFor="phone_1"
-                className="text-sm font-medium text-gray-900 block mb-2"
+                className="block text-sm font-medium text-gray-700"
               >
                 Phone (fixe)
               </label>
               <input
                 type="text"
-                name="phone_1"
                 id="phone_1"
-                autoComplete="off"
+                name="phone_1"
                 value={appointmentData.phone_1}
                 onChange={handleInputChange}
-                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               />
             </div>
             <div className="col-span-6 sm:col-span-3">
               <label
                 htmlFor="phone_2"
-                className="text-sm font-medium text-gray-900 block mb-2"
+                className="block text-sm font-medium text-gray-700"
               >
                 Phone (mobile)
               </label>
               <input
                 type="text"
-                name="phone_2"
                 id="phone_2"
-                autoComplete="off"
+                name="phone_2"
                 value={appointmentData.phone_2}
                 onChange={handleInputChange}
-                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-              />
-            </div>
-
-            <div className="col-span-full">
-              <label
-                htmlFor="address"
-                className="text-sm font-medium text-gray-900 block mb-2"
-              >
-                Address
-              </label>
-              <input
-                id="address"
-                name="address"
-                type="text"
-                autoComplete="off"
-                value={appointmentData.address}
-                onChange={handleInputChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4"
-              />
-            </div>
-            <div className="col-span-full">
-              <label
-                htmlFor="comment"
-                className="text-sm font-medium text-gray-900 block mb-2"
-              >
-                Appointment Comment
-              </label>
-              <textarea
-                id="comment"
-                name="comment"
-                autoComplete="off"
-                value={appointmentData.comment}
-                onChange={handleInputChange}
-                rows="6"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4"
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               />
             </div>
           </div>
-        </form>
-      </div>
 
-      <div className="p-6 border-t border-gray-200 rounded-b space-x-4">
-        <button
-          className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5"
-          type="submit"
-          onClick={handleSubmit}
-        >
-          Update
-        </button>
-        <button
-          className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-200 font-medium rounded-lg text-sm px-5 py-2.5"
-          type="button"
-          onClick={handleDelete}
-        >
-          Supprimé
-        </button>
-        <button
-          className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5"
-          type="button"
-          onClick={handleCancel}
-        >
-          Annulé
-        </button>
+          <div className="col-span-6 sm:col-span-3">
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Address
+            </label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={appointmentData.address}
+              onChange={handleInputChange}
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            />
+          </div>
+
+          <div className="col-span-6 sm:col-span-3">
+            <label
+              htmlFor="comment"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Comment
+            </label>
+            <textarea
+              id="comment"
+              name="comment"
+              value={appointmentData.comment}
+              onChange={handleInputChange}
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            ></textarea>
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="px-4 py-2 mr-2 bg-blue-500 text-white rounded-md"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="px-4 py-2 mr-2 bg-red-500 text-white rounded-md"
+            >
+              Delete
+            </button>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="px-4 py-2 bg-gray-500 text-white rounded-md"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -1,44 +1,32 @@
 import React from "react";
-import {
-  Button,
-  Label,
-  Modal,
-  Select,
-  Spinner,
-  TextInput,
-  Textarea,
-} from "flowbite-react";
+import { Button, Label, Modal, Select, Spinner, TextInput, Textarea } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-
-import fr from "date-fns/locale/fr";
-
+import { fr } from "date-fns/locale";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AppointmentService } from "../_helpers";
 import { alertActions } from "../_store";
 
-export function AppointmentAdd({ closeModal }) {
+export const AppointmentAdd = ({ closeModal }) => {
   const dispatch = useDispatch();
-  const authUser = useSelector((state) => state.auth?.user);
-
-  const { register, handleSubmit, formState, watch, reset } = useForm();
-  const { isSubmitting } = formState;
+  const { user } = useSelector((state) => state.auth);
+  const { register, handleSubmit, formState: { isSubmitting }, watch, reset } = useForm();
 
   const onSubmit = async (data) => {
-    const userId = authUser?.id;
+    const userId = user?.id ?? "";
 
-    await AppointmentService.createAppointment(userId, data)
-      .then((response) => response.data)
-      .then(
-        dispatch(alertActions.success("Add Success")),
-        closeModal(),
-        reset()
-      )
-      .catch((err) => {
-        console.log(err);
-        dispatch(alertActions.error(err));
-      });
+    try {
+      // const { data: responseData } =
+       await AppointmentService.createAppointment(userId, data);
+      // console.log(responseData);
+      dispatch(alertActions.success("Add Success"));
+      closeModal();
+      reset();
+    } catch (err) {
+      console.log(err);
+      dispatch(alertActions.error(err));
+    }
 
     setTimeout(() => {
       dispatch(alertActions.clear());
@@ -87,9 +75,7 @@ export function AppointmentAdd({ closeModal }) {
                   isClearable
                   showIcon
                   selected={watch("date")}
-                  onChange={(date) => {
-                    reset({ date });
-                  }}
+                  onChange={(date) => { reset({ date }) }}
                   showTimeSelect
                   timeFormat="HH:mm"
                   timeIntervals={30}
@@ -105,10 +91,7 @@ export function AppointmentAdd({ closeModal }) {
           </div>
 
           <div className="mb-5">
-            <Label
-              htmlFor="name"
-              className="mb-3 block text-base font-medium text-[#07074D]"
-            >
+            <Label htmlFor="name" className="mb-3 block text-base font-medium text-[#07074D]">
               Full Name
             </Label>
             <TextInput
@@ -124,10 +107,7 @@ export function AppointmentAdd({ closeModal }) {
 
           <div className="-mx-3 flex flex-wrap">
             <div className="w-full px-3 sm:w-1/2">
-              <Label
-                htmlFor="phoneFixe"
-                className="mb-3 block text-base font-medium text-[#07074D]"
-              >
+              <Label htmlFor="phoneFixe" className="mb-3 block text-base font-medium text-[#07074D]">
                 Phone (fixe)
               </Label>
               <TextInput
@@ -140,10 +120,7 @@ export function AppointmentAdd({ closeModal }) {
               />
             </div>
             <div className="w-full px-3 sm:w-1/2">
-              <Label
-                htmlFor="phoneMobile"
-                className="mb-3 block text-base font-medium text-[#07074D]"
-              >
+              <Label htmlFor="phoneMobile" className="mb-3 block text-base font-medium text-[#07074D]">
                 Phone (mobile)
               </Label>
               <TextInput
@@ -158,10 +135,7 @@ export function AppointmentAdd({ closeModal }) {
           </div>
 
           <div className="mb-5">
-            <Label
-              htmlFor="address"
-              className="mb-3 block text-base font-medium text-[#07074D]"
-            >
+            <Label htmlFor="address" className="mb-3 block text-base font-medium text-[#07074D]">
               Address
             </Label>
             <TextInput
@@ -175,10 +149,7 @@ export function AppointmentAdd({ closeModal }) {
           </div>
 
           <div className="mb-5">
-            <Label
-              htmlFor="comment"
-              className="mb-3 block text-base font-medium text-[#07074D]"
-            >
+            <Label htmlFor="comment" className="mb-3 block text-base font-medium text-[#07074D]">
               Comment
             </Label>
             <Textarea
@@ -206,4 +177,4 @@ export function AppointmentAdd({ closeModal }) {
       </div>
     </>
   );
-}
+};
