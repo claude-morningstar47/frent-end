@@ -1,5 +1,5 @@
-import { DarkThemeToggle, Navbar, Dropdown, Avatar } from "flowbite-react";
 import React from "react";
+import { DarkThemeToggle, Navbar, Dropdown, Avatar } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../_store";
 import { Link } from "react-router-dom";

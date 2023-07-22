@@ -4,37 +4,26 @@ import { AppointmentService } from "../_helpers";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import Clock from "../components/Clock";
+import { useWeekManager } from "../components/weekManager";
 dayjs.extend(isoWeek);
 
 export const AppointmentWeek = () => {
-  const currentDate = dayjs().format("YYYY");
-  const currentWeek = dayjs().isoWeek();
-  const dateWeek = `${currentDate}-W${currentWeek}`;
-
-  const [week, setWeek] = useState(dateWeek);
-
-  // Fetch appointments
-  const retrieveAppointments = async (week) => {
-    try {
-      const response = await AppointmentService.getAllAppointmentsByWeek(week);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
-
+  const { week, handleWeekChange } = useWeekManager();
   const queryClient = useQueryClient();
 
+  // Fetch appointments
   const { data, error, isLoading, isError, isFetching } = useQuery(
-    ["appointments", week],
-    () => retrieveAppointments(week)
-    // { cacheTime: 60000 }
+    ["appointmentsByWeek", week],
+    () =>
+      AppointmentService.getAllAppointmentsByWeek(week)
+        .then((response) => response.data)
+        .catch((err) => console.log("err", err)),
+    { cacheTime: 6000, refetchOnMount: true, refetchOnWindowFocus: true }
   );
 
   useEffect(() => {
     if (isError && error.response && error.response.status === 201) {
-      queryClient.invalidateQueries(["appointments", week]);
+      queryClient.invalidateQueries(["appointmentsByWeek", week]);
     }
   }, [isError, error, queryClient, week]);
 
@@ -50,9 +39,9 @@ export const AppointmentWeek = () => {
   };
 
   const handleWeek = (e) => {
-    // setWeek(e.target.value);
     const newWeek = e.target.value;
-    setWeek(newWeek);
+    handleWeekChange(newWeek);
+    // setWeek(newWeek);
   };
 
   return (

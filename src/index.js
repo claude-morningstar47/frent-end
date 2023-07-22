@@ -5,16 +5,21 @@ import "./index.css";
 import { _store } from "./_store";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+
 import { Provider } from "react-redux";
 import { Flowbite } from "flowbite-react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 300000, // Durée de blocage des requêtes en millisecondes (60 000 ms = 1 minute)
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: false,
+      staleTime: 5 * 60 * 1000, 
     },
   },
-  devTools: true, // Activer les outils de développement de React Query
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -26,6 +31,7 @@ root.render(
           <Flowbite>
             <App />
           </Flowbite>
+          <ReactQueryDevtools initialIsOpen={false}/>
         </QueryClientProvider>
       </BrowserRouter>
     </Provider>

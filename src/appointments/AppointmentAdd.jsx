@@ -1,5 +1,13 @@
-import React from "react";
-import { Button, Label, Modal, Select, Spinner, TextInput, Textarea } from "flowbite-react";
+import React, { useEffect } from "react";
+import {
+  Button,
+  Label,
+  Modal,
+  Select,
+  Spinner,
+  TextInput,
+  Textarea,
+} from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { fr } from "date-fns/locale";
@@ -7,20 +15,35 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AppointmentService } from "../_helpers";
 import { alertActions } from "../_store";
+import { useQueryClient } from "react-query";
+import { useWeekManager } from "../components/weekManager";
 
 export const AppointmentAdd = ({ closeModal }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { register, handleSubmit, formState: { isSubmitting }, watch, reset } = useForm();
+  const queryClient = useQueryClient();
+  const { week } = useWeekManager();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+    watch,
+    reset,
+  } = useForm();
 
   const onSubmit = async (data) => {
     const userId = user?.id ?? "";
 
     try {
-      // const { data: responseData } =
-       await AppointmentService.createAppointment(userId, data);
-      // console.log(responseData);
-      dispatch(alertActions.success("Add Success"));
+      const { statusText } = await AppointmentService.createAppointment(
+        userId,
+        data
+      );
+      queryClient.invalidateQueries(["appointmentByUserId", userId]);
+      queryClient.refetchQueries(["appointmentsByWeek", week]);
+
+      dispatch(alertActions.success(statusText));
       closeModal();
       reset();
     } catch (err) {
@@ -75,7 +98,9 @@ export const AppointmentAdd = ({ closeModal }) => {
                   isClearable
                   showIcon
                   selected={watch("date")}
-                  onChange={(date) => { reset({ date }) }}
+                  onChange={(date) => {
+                    reset({ date });
+                  }}
                   showTimeSelect
                   timeFormat="HH:mm"
                   timeIntervals={30}
@@ -91,7 +116,10 @@ export const AppointmentAdd = ({ closeModal }) => {
           </div>
 
           <div className="mb-5">
-            <Label htmlFor="name" className="mb-3 block text-base font-medium text-[#07074D]">
+            <Label
+              htmlFor="name"
+              className="mb-3 block text-base font-medium text-[#07074D]"
+            >
               Full Name
             </Label>
             <TextInput
@@ -107,7 +135,10 @@ export const AppointmentAdd = ({ closeModal }) => {
 
           <div className="-mx-3 flex flex-wrap">
             <div className="w-full px-3 sm:w-1/2">
-              <Label htmlFor="phoneFixe" className="mb-3 block text-base font-medium text-[#07074D]">
+              <Label
+                htmlFor="phoneFixe"
+                className="mb-3 block text-base font-medium text-[#07074D]"
+              >
                 Phone (fixe)
               </Label>
               <TextInput
@@ -120,7 +151,10 @@ export const AppointmentAdd = ({ closeModal }) => {
               />
             </div>
             <div className="w-full px-3 sm:w-1/2">
-              <Label htmlFor="phoneMobile" className="mb-3 block text-base font-medium text-[#07074D]">
+              <Label
+                htmlFor="phoneMobile"
+                className="mb-3 block text-base font-medium text-[#07074D]"
+              >
                 Phone (mobile)
               </Label>
               <TextInput
@@ -135,7 +169,10 @@ export const AppointmentAdd = ({ closeModal }) => {
           </div>
 
           <div className="mb-5">
-            <Label htmlFor="address" className="mb-3 block text-base font-medium text-[#07074D]">
+            <Label
+              htmlFor="address"
+              className="mb-3 block text-base font-medium text-[#07074D]"
+            >
               Address
             </Label>
             <TextInput
@@ -149,7 +186,10 @@ export const AppointmentAdd = ({ closeModal }) => {
           </div>
 
           <div className="mb-5">
-            <Label htmlFor="comment" className="mb-3 block text-base font-medium text-[#07074D]">
+            <Label
+              htmlFor="comment"
+              className="mb-3 block text-base font-medium text-[#07074D]"
+            >
               Comment
             </Label>
             <Textarea

@@ -34,7 +34,7 @@ function redirectToLogin() {
 }
 
 export const instanceHttp = axios.create({
-  baseURL: "http://192.168.100.50:5000/api",
+  baseURL: "http://192.168.100.2:8080/api",
   headers: {
     "Content-Type": "application/json",
   },

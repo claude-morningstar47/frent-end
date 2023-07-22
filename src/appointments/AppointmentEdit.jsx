@@ -20,18 +20,6 @@ const AppointmentEdit = () => {
     phone_2: "",
   });
 
-  const retrieveAppointment = async (appointmentId) => {
-    try {
-      const response = await AppointmentService.getAppointmentById(
-        appointmentId
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
-
   const updateAppointment = async (appointmentId, data) => {
     try {
       const response = await AppointmentService.updateAppointment(
@@ -60,14 +48,17 @@ const AppointmentEdit = () => {
   };
 
   const { data, isLoading, isError, error } = useQuery(
-    ["appointment", appointmentId],
-    () => retrieveAppointment(appointmentId),
+    ["appointmentById", appointmentId],
+    () =>
+      AppointmentService.getAppointmentById(appointmentId)
+        .then((response) => response.data)
+        .catch((err) => console.log("err", err)),
     { cacheTime: 6000 }
   );
 
   useEffect(() => {
     if (isError && error.response && error.response.status === 201) {
-      queryClient.invalidateQueries(["appointment", appointmentId]);
+      queryClient.invalidateQueries(["appointmentById", appointmentId]);
     }
   }, [isError, error, queryClient, appointmentId]);
 

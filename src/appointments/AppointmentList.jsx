@@ -16,35 +16,28 @@ export const AppointmentList = ({ refreshList }) => {
   // Redux
   const authUser = useSelector((state) => state.auth?.user);
   const userId = authUser?.id;
-
+  
+  // Query appointments
+  const queryClient = useQueryClient();
+  
   // Fetch appointments
-  const retrieveAppointments = async (userId, selectedDate, page, limit) => {
-    try {
-      const response = await AppointmentService.getAppointmentsByUserId(
+  const { data, isLoading, isError, error } = useQuery(
+    ["appointmentByUserId", userId, selectedDate, page, limit],
+    () =>
+      AppointmentService.getAppointmentsByUserId(
         userId,
         selectedDate,
         page,
         limit
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
-
-  // Query appointments
-  const queryClient = useQueryClient();
-
-  const { data, isLoading, isError, error } = useQuery(
-    ["appointments", userId, selectedDate, page, limit],
-    () => retrieveAppointments(userId, selectedDate, page, limit),
+      )
+        .then((response) => response.data)
+        .catch((err) => console.log("err", err)),
     { cacheTime: 6000, refetchOnMount: true, refetchOnWindowFocus: true }
   );
 
   useEffect(() => {
     if (isError && error.response && error.response.status === 201) {
-      queryClient.invalidateQueries(["appointments", userId, selectedDate]);
+      queryClient.invalidateQueries(["appointmentByUserId", userId, selectedDate]);
     }
   }, [isError, error, queryClient, userId, selectedDate, refreshList]);
 
