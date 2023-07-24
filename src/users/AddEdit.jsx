@@ -137,7 +137,7 @@ export function AddEdit() {
                   name="roles"
                   value="ROLE_USER"
                   {...register("roles", {
-                    setValueAs: () => ["user"],
+                    setValueAs: () => "user",
                   })}
                   className={`border-0 px-3 py-2 mt-1 mr-2 ${
                     errors.roles ? "border-red-500" : ""

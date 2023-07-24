@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { alertActions } from ".";
-import { instanceHttp, customHistory , sessionCookie } from "../_helpers";
+import { instanceHttp, customHistory, sessionCookie } from "../_helpers";
 
 import CryptoJS from "crypto-js";
 
@@ -21,8 +21,14 @@ function createInitialState() {
   const encryptedAuthToken = localStorage.getItem("encryptedAuthToken");
 
   if (encryptedAuthUser && encryptedAuthToken) {
-    const decryptedAuthUser = CryptoJS.AES.decrypt(encryptedAuthUser,cle_crypto);
-    const decryptedAuthToken = CryptoJS.AES.decrypt(encryptedAuthToken,cle_crypto);
+    const decryptedAuthUser = CryptoJS.AES.decrypt(
+      encryptedAuthUser,
+      cle_crypto
+    );
+    const decryptedAuthToken = CryptoJS.AES.decrypt(
+      encryptedAuthToken,
+      cle_crypto
+    );
 
     const serializedAuthUser = decryptedAuthUser.toString(CryptoJS.enc.Utf8);
     const serializedAuthToken = decryptedAuthToken.toString(CryptoJS.enc.Utf8);
@@ -70,28 +76,54 @@ function createExtraActions() {
         // dispatch(alertActions.clear());
 
         try {
-          const response = await instanceHttp.post("/auth/signin", { email, password });
+          const response = await instanceHttp.post("/auth/signin", {
+            email,
+            password,
+          });
 
           const { userlog, roles, accessToken, refreshToken } = response.data;
 
           const serializedAuthUser = JSON.stringify({ userlog, roles });
-          const serializedAuthToken = JSON.stringify({ accessToken,refreshToken });
+          const serializedAuthToken = JSON.stringify({
+            accessToken,
+            refreshToken,
+          });
 
-          const encryptedAuthUser = CryptoJS.AES.encrypt( serializedAuthUser, "969262841ebd74718661d32cee2d6ee65d912010a8d4a53365cdf0496ebe4ea1");
-          const encryptedAuthToken = CryptoJS.AES.encrypt( serializedAuthToken, "969262841ebd74718661d32cee2d6ee65d912010a8d4a53365cdf0496ebe4ea1");
+          const encryptedAuthUser = CryptoJS.AES.encrypt(
+            serializedAuthUser,
+            "969262841ebd74718661d32cee2d6ee65d912010a8d4a53365cdf0496ebe4ea1"
+          );
+          const encryptedAuthToken = CryptoJS.AES.encrypt(
+            serializedAuthToken,
+            "969262841ebd74718661d32cee2d6ee65d912010a8d4a53365cdf0496ebe4ea1"
+          );
 
-          localStorage.setItem("encryptedAuthUser", encryptedAuthUser.toString());
-          localStorage.setItem("encryptedAuthToken", encryptedAuthToken.toString());
+          localStorage.setItem(
+            "encryptedAuthUser",
+            encryptedAuthUser.toString()
+          );
+          localStorage.setItem(
+            "encryptedAuthToken",
+            encryptedAuthToken.toString()
+          );
 
-          sessionCookie.set('encryptedAuthUser', encryptedAuthUser, {secure: true, sameSite: "strict"})
-          sessionCookie.set('encryptedAuthToken', encryptedAuthToken, {secure: true, sameSite: "strict"})
+          sessionCookie.set("encryptedAuthUser", encryptedAuthUser, {
+            secure: true,
+            sameSite: "strict",
+          });
+          sessionCookie.set("encryptedAuthToken", encryptedAuthToken, {
+            secure: true,
+            sameSite: "strict",
+          });
 
-          dispatch(authActions.setAuth({ userlog, roles, accessToken, refreshToken }));
+          dispatch(
+            authActions.setAuth({ userlog, roles, accessToken, refreshToken })
+          );
 
-
-          const { from } = customHistory.location.state || { from: { pathname: "/" ,replace: true}};
+          const { from } = customHistory.location.state || {
+            from: { pathname: "/", replace: true },
+          };
           customHistory.navigate(from);
-
         } catch (error) {
           console.log(error);
           dispatch(alertActions.error(error.message));
@@ -101,19 +133,29 @@ function createExtraActions() {
     logout: createAsyncThunk(
       `${name}/logout`,
       async function (_, { dispatch }) {
-        dispatch(authActions.setAuth({userlog: null, roles:[], accessToken: "", refreshToken: "", isLogged: false}))
-        instanceHttp.post(`/auth/logout`).catch((error) => {
+        dispatch(
+          authActions.setAuth({
+            userlog: null,
+            roles: [],
+            accessToken: "",
+            refreshToken: "",
+            isLogged: false,
+          })
+        );
+        const { user } = createInitialState();
+        const _id = user.id;
+        instanceHttp.post(`/auth/logout`, { _id }).catch((error) => {
           console.error("Logout API call failed:", error);
         });
 
-        localStorage.removeItem('encryptedAuthUser')
-        localStorage.removeItem('encryptedAuthToken')
-        const { from } = customHistory.location.state || { from: { pathname: "/auth/signin" ,replace: true}};
+        localStorage.removeItem("encryptedAuthUser");
+        localStorage.removeItem("encryptedAuthToken");
+        const { from } = customHistory.location.state || {
+          from: { pathname: "/auth/signin", replace: true },
+        };
 
-        customHistory.navigate(from); 
-
+        customHistory.navigate(from);
       }
     ),
   };
 }
-

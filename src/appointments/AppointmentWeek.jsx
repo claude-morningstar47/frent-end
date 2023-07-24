@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import Clock from "../_helpers/Clock";
 import { useWeekManager } from "../_helpers/weekManager";
+import { TextInput } from "flowbite-react";
 dayjs.extend(isoWeek);
 
 export const AppointmentWeek = () => {
@@ -47,13 +48,13 @@ export const AppointmentWeek = () => {
   return (
     <div className="bg-gray-100 p-4">
       <div className="grid grid-cols-6 gap-6">
-        <input
+        <TextInput 
           type="week"
           name="week"
           id="week"
           value={week}
           onChange={handleWeek}
-          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+          // className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         />
 
         <Clock />
@@ -69,7 +70,7 @@ export const AppointmentWeek = () => {
           </h2>
 
           <table
-            className="w-full border border-gray-900"
+            className="w-full border border-gray-900 text-gray-700"
             style={{ zIndex: "9999" }}
           >
             <thead>
