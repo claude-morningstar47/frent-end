@@ -23,8 +23,9 @@ export default function DefaultNavbar() {
       <Navbar.Brand as={Link} to="/">
         <img
           alt="Flowbite React Logo"
-          className="mr-3 h-6 sm:h-9"
-          src="https://flowbite.s3.amazonaws.com/logo.svg"
+          className="mr-3 h-6 sm:h-9 border"
+          // src="https://flowbite.s3.amazonaws.com/logo.svg"
+          src="/images/logo.png"
         />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
           Linkuup Medical
