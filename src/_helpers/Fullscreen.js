@@ -1,8 +1,9 @@
 import { Button } from "flowbite-react";
 import { useEffect, useState } from "react";
 
-export const FullScreen = () => {
+export const FullScreen = ({ children }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
+
   const toggleFullScreen = () => {
     if (!isFullScreen) {
       const element = document.documentElement;
@@ -27,6 +28,7 @@ export const FullScreen = () => {
       }
     }
   };
+
   useEffect(() => {
     const handleFullScreenChange = () => {
       setIsFullScreen(!!document.fullscreenElement);
@@ -40,8 +42,11 @@ export const FullScreen = () => {
   }, []);
 
   return (
-    <Button color='gray' onClick={toggleFullScreen}>
-      {isFullScreen ? "Quitter" : "Activer le mode plein écran"}
-    </Button>
+    <div>
+      <Button color="gray" onClick={toggleFullScreen}>
+        {isFullScreen ? "Quitter" : "Activer le mode plein écran"}
+      </Button>
+      {children}
+    </div>
   );
 };

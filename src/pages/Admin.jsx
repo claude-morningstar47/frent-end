@@ -1,25 +1,21 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
-// import { AppointmentWeek } from "../appointments/AppointmentWeek";
 import { AppointmentAllList } from "../appointments/AppointmentAllList";
 
 export default function AdminPage() {
-
   return (
-    <>
-      <div className="flex flex-col item-center">
-        <p className="text-x1 font-semibold leading-tight mb-4 flex justify-center">
-          Welcome Admin
-        </p>
-        <Link to='../users'>Manage users ==== </Link>
-        {/* <AppointmentWeek/> */}
-        <div className="mt-3">
-
-        <AppointmentAllList/>
-        </div>
+    <div className="flex flex-col items-center">
+      <p className="text-3xl font-semibold leading-tight mb-4">Welcome Admin</p>
+      <div className="border rounded-lg p-1">
+        <Link to="../users" className="text-gray-500 hover:text-blue-600">
+          Manage users ➜
+        </Link>
       </div>
 
-      
-    </>
+      <div className="mt-3">
+        <AppointmentAllList />
+      </div>
+    </div>
   );
 }

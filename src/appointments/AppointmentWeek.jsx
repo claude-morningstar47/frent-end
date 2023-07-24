@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { AppointmentService } from "../_helpers";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
-import Clock from "../components/Clock";
-import { useWeekManager } from "../components/weekManager";
+import Clock from "../_helpers/Clock";
+import { useWeekManager } from "../_helpers/weekManager";
 dayjs.extend(isoWeek);
 
 export const AppointmentWeek = () => {

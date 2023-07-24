@@ -9,7 +9,6 @@ export default function HomePage() {
 
   const handleClose = () => {
     setRefreshList((prevState) => !prevState);
-    // setRefreshList(true);
     setOpenModal(false);
   };
 
@@ -34,9 +33,7 @@ export default function HomePage() {
         </Modal.Body>
       </Modal>
 
-      <div
-      // className="w-full flex justify-center"
-      >
+      <div>
         <AppointmentList refreshList={refreshList} />
       </div>
     </>

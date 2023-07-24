@@ -1,6 +1,6 @@
 import React from "react";
 import { AppointmentWeek } from "../appointments/AppointmentWeek";
-import { FullScreen } from "../components/Fullscreen";
+import { FullScreen } from "../_helpers/Fullscreen";
 
 export default function ManagerPage() {
   return (
@@ -10,9 +10,12 @@ export default function ManagerPage() {
           Welcome Manager
         </p>
       </div>
-      <div className="w-full flex justify-center"></div>
-      <FullScreen />
+      <div className="w-full flex justify-center">
+
+      <FullScreen >
       <AppointmentWeek />
+      </FullScreen>
+      </div>
     </>
   );
 }
