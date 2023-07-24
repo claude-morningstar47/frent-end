@@ -1,13 +1,5 @@
-import React, { useEffect } from "react";
-import {
-  Button,
-  Label,
-  Modal,
-  Select,
-  Spinner,
-  TextInput,
-  Textarea,
-} from "flowbite-react";
+import React from "react";
+import { Button, Label, Modal, Select, Spinner, TextInput, Textarea } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { fr } from "date-fns/locale";
@@ -15,7 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AppointmentService } from "../_helpers";
 import { alertActions } from "../_store";
-import { useQueryClient, useMutation } from "react-query";
+import { useQueryClient } from "react-query";
 import { useWeekManager } from "../_helpers/weekManager";
 
 export const AppointmentAdd = ({ closeModal }) => {
@@ -24,51 +16,15 @@ export const AppointmentAdd = ({ closeModal }) => {
   const queryClient = useQueryClient();
   const { week } = useWeekManager();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-    watch,
-    reset,
-  } = useForm();
-
-// const createAppointmentMutation = async (data) => {
-//   const userId = user?.id ?? "";
-
-//   // Effectuez votre logique de création de rendez-vous ici
-//   // Par exemple, appelez votre service de rendez-vous pour créer un rendez-vous
-//   const response = await AppointmentService.createAppointment(userId, data);
-//   return response.data; // Retournez les données de la réponse si nécessaire
-// };
-// const { mutate, isLoading, isError, isSuccess } = useMutation(createAppointmentMutation);
-
-
-// const onSubmit = async (data) => {
-//   try {
-//     await mutate(data); // Appel de la fonction de mutation avec les données du formulaire
-//     // Gérez les résultats de la mutation ici, par exemple, affichez un message de succès
-//     await queryClient.invalidateQueries("appointmentByUserId");
-//     await queryClient.refetchQueries("appointmentsByWeek");
-//     dispatch(alertActions.success());
-//       closeModal();
-//       reset();
-//   } catch (error) {
-//     // Gérez les erreurs de la mutation ici, par exemple, affichez un message d'erreur
-//     console.log(error);
-//     dispatch(alertActions.error(error));
-//   }
-// };
+  const { register, handleSubmit, formState: { isSubmitting }, watch, reset } = useForm();
 
   const onSubmit = async (data) => {
     const userId = user?.id ?? "";
 
     try {
-      const { statusText } = await AppointmentService.createAppointment(
-        userId,
-        data
-      );
+      const { statusText } = await AppointmentService.createAppointment(userId, data);
       await queryClient.invalidateQueries("appointmentByUserId");
-      await queryClient.invalidateQueries("appointmentsByWeek");
+      await queryClient.invalidateQueries(["appointmentsByWeek", week]);
 
       dispatch(alertActions.success(statusText));
       closeModal();

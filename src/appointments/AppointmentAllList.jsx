@@ -28,7 +28,7 @@ const AppointmentAllList = () => {
   ]);
 
   const page = 1;
-  const limit = 100;
+  const limit = 400;
 
   // Fetch appointments
   const retrieveAppointments = async (startDate, endDate, page, limit) => {
