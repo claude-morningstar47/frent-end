@@ -66,7 +66,7 @@ export const AppointmentWeek = () => {
       ) : (
         <div>
           <h2 className="text-xl font-bold mb-4">
-            Performance des employés de la semaine
+            Performance des agents de la semaine
           </h2>
 
           <table
