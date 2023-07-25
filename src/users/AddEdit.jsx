@@ -1,18 +1,17 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { customHistory } from "../_helpers";
 import { usersActions, alertActions } from "../_store";
-import { Button, Label, TextInput } from "flowbite-react";
 import { lowerCase } from "lodash"; // Add this line to import the lowerCase function
 
 export function AddEdit() {
   const { userId } = useParams();
   const [title, setTitle] = useState();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state?.users.item);
+  // const user = useSelector((state) => state?.users.item);
 
   const { register, handleSubmit, reset, formState } = useForm();
   const { errors, isSubmitting } = formState;
@@ -54,8 +53,8 @@ export function AddEdit() {
         message = response.message || "User added";
       }
       // redirect to users list with success message
-      // customHistory.navigate("/users");
-      // dispatch(alertActions.success({ message, showAfterRedirect: true }));
+      customHistory.navigate("/users");
+      dispatch(alertActions.success({ message, showAfterRedirect: true }));
     } catch (error) {
       dispatch(alertActions.error(error));
     }
