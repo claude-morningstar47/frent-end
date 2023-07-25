@@ -1,5 +1,3 @@
-
-
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,7 +28,6 @@ export function UsersList() {
         Add User
       </Link>
 
-
       <h1 className="text-2xl font-bold mb-4">Users List</h1>
       <table className="w-full bg-white border border-gray-200">
         <thead>
@@ -38,6 +35,7 @@ export function UsersList() {
             <th className="py-2 px-4 border-b">First Name</th>
             <th className="py-2 px-4 border-b">Last Name</th>
             <th className="py-2 px-4 border-b">Email</th>
+            <th className="py-2 px-4 border-b">Satus</th>
             <th className="py-2 px-4 border-b">Roles</th>
             <th className="py-2 px-4 border-b"></th>
           </tr>
@@ -55,6 +53,18 @@ export function UsersList() {
                 <td className="py-2 px-4 border-b">{user.firstName}</td>
                 <td className="py-2 px-4 border-b">{user.lastName}</td>
                 <td className="py-2 px-4 border-b">{user.email}</td>
+                {/* <td className="py-2 px-4 border-b">{user.isActive}</td> */}
+                {/* <td className="py-2 px-4 border-b">{user.isActive ? "En ligne" : "Hors ligne"}</td> */}
+                <td className="py-2 px-4 border-b">
+                  <span
+                    className={`badge ${
+                      user.isActive ? "text-green-500" : "text-red-500"
+                    }`}
+                  >
+                    {user.isActive ? "En ligne" : "Hors ligne"}
+                  </span>
+                </td>
+
                 <td className="py-2 px-4 border-b">{user.roles.join(", ")}</td>
                 <td className="py-2 px-4 border-b">
                   <Link

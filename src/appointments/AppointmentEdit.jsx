@@ -166,6 +166,7 @@ const AppointmentEdit = () => {
               </select>
             </div>
           </div>
+          <div className="grid grid-cols-6 gap-6">
 
           <div className="col-span-6 sm:col-span-3">
             <label
@@ -182,6 +183,24 @@ const AppointmentEdit = () => {
               onChange={handleInputChange}
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             />
+          </div>
+
+          <div className="col-span-6 sm:col-span-3">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Date
+            </label>
+            <input
+              type="datetime-local"
+              id="date"
+              name="date"
+              value={appointmentData.date}
+              onChange={handleInputChange}
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            />
+          </div>
           </div>
 
           <div className="grid grid-cols-6 gap-6">
