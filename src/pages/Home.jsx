@@ -33,9 +33,9 @@ export default function HomePage() {
         </Modal.Body>
       </Modal>
 
-      <div>
+      {/* <div> */}
         <AppointmentList refreshList={refreshList} />
-      </div>
+      {/* </div> */}
     </>
   );
 }

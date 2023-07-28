@@ -212,9 +212,7 @@ const AppointmentAllList = () => {
             <Table.HeadCell>Scheduling Date</Table.HeadCell>
             <Table.HeadCell>Sales Representative</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">Edit</span>
-            </Table.HeadCell>
+            <Table.HeadCell>Edit</Table.HeadCell>
           </Table.Head>
 
           <Table.Body className="divide-y">
@@ -272,7 +270,8 @@ const AppointmentAllList = () => {
                     <span
                       className={`relative inline-block px-3 py-1 font-semibold leading-tight rounded-full ${getBackgroundColor(
                         appointment.status
-                      )}`}  style={{ whiteSpace: "nowrap" }}
+                      )}`}
+                      style={{ whiteSpace: "nowrap" }}
                     >
                       <span
                         aria-hidden

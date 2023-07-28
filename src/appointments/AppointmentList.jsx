@@ -88,7 +88,7 @@ export const AppointmentList = ({ refreshList }) => {
         <Table.Body className="divide-y">
           {sortedAppointments.map((appointment, index) => (
             <Table.Row
-              key={appointment.id}
+              key={appointment._id}
               className="bg-white text-xs dark:border-gray-700 dark:bg-gray-800"
             >
               <Table.Cell>{index + 1}</Table.Cell>
