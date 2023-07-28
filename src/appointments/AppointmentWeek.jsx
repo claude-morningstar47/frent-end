@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { AppointmentService } from "../_helpers";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
-import Clock from "../_helpers/Clock";
 import { useWeekManager } from "../_helpers/weekManager";
 import { TextInput } from "flowbite-react";
 dayjs.extend(isoWeek);
@@ -56,8 +55,6 @@ export const AppointmentWeek = () => {
           onChange={handleWeek}
           // className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         />
-
-        <Clock />
       </div>
       {isLoading ? (
         <div>Loading...</div>
