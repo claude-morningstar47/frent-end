@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-const Clock = () => {
+export const Clock = () => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -13,10 +13,8 @@ const Clock = () => {
   }, []);
 
   return (
-    <>
-      <p className="text-xl font-bold">{time.toLocaleTimeString()}</p>
-    </>
+    <div className="items-center">
+      <p className="text-xl font-bold">Heure : {time.toLocaleTimeString()}</p>
+    </div>
   );
 };
-
-export default Clock;
