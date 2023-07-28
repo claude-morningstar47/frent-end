@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { Spinner, Table, TextInput } from "flowbite-react";
 import { AppointmentService } from "../_helpers";
 import dayjs from "dayjs";
+import { convertirEnFrancais, getBackgroundColor } from "../utils/statusStyle";
 
 export const AppointmentList = ({ refreshList }) => {
   // State
@@ -60,44 +61,6 @@ export const AppointmentList = ({ refreshList }) => {
     const newDate = event.target.value;
     setSelectedDate(newDate);
   };
-
-  function convertirEnFrancais(status) {
-    switch (status) {
-      case "pending":
-        return "En attente";
-      case "confirmed":
-        return "Confirmé";
-      case "cancelled":
-        return "Annulé";
-      case "not-interested":
-        return "Non intéressé";
-      case "to-be-reminded":
-        return "À rappeler";
-      case "longest-date":
-        return "Date éloignée";
-      default:
-        return status;
-    }
-  }
-
-  function getBackgroundColor(status) {
-    switch (status) {
-      case "pending":
-        return "text-green-900 bg-green-200";
-      case "confirmed":
-        return "text-blue-900 bg-blue-200";
-      case "cancelled":
-        return "text-red-900 bg-red-200";
-      case "not-interested":
-        return "text-gray-900 bg-gray-200";
-      case "to-be-reminded":
-        return "text-yellow-900 bg-yellow-200";
-      case "longest-date":
-        return "text-purple-900 bg-purple-200";
-      default:
-        return "";
-    }
-  }
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -159,29 +122,18 @@ export const AppointmentList = ({ refreshList }) => {
               </Table.Cell>
               <Table.Cell>{appointment.commercial}</Table.Cell>
 
-              {/* <Table.Cell>
-                <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                  <span
-                    aria-hidden
-                    className="absolute text-xs inset-0 bg-green-200 opacity-50 rounded-full"
-                  ></span>
-                  <span className="relative text-xs">{appointment.status}</span>
-                </span>
-              </Table.Cell> */}
-
               <Table.Cell>
                 <span
-                  className={`relative inline-block px-3 py-1 font-semibold leading-tight ${getBackgroundColor(
+                  className={`relative inline-block px-3 py-1 font-semibold leading-tight rounded-full ${getBackgroundColor(
                     appointment.status
                   )}`}
+                  style={{ whiteSpace: "nowrap" }}
                 >
                   <span
                     aria-hidden
-                    className="absolute text-xs inset-0 opacity-50 rounded-full"
+                    className="absolute text-xs inset-0 opacity-50 "
                   />
-                  <span className="relative text-xs">
-                    {convertirEnFrancais(appointment.status)}
-                  </span>
+                  {convertirEnFrancais(appointment.status)}
                 </span>
               </Table.Cell>
             </Table.Row>

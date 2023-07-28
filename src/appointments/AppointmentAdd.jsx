@@ -22,11 +22,11 @@ export const AppointmentAdd = ({ closeModal }) => {
     const userId = user?.id ?? "";
 
     try {
-      const { statusText } = await AppointmentService.createAppointment(userId, data);
+      await AppointmentService.createAppointment(userId, data);
       await queryClient.invalidateQueries("appointmentByUserId");
       await queryClient.invalidateQueries(["appointmentsByWeek", week]);
 
-      dispatch(alertActions.success(statusText));
+      dispatch(alertActions.success("Appointment successfully added"));
       closeModal();
       reset();
     } catch (err) {

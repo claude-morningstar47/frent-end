@@ -11,6 +11,7 @@ import { formatSelectedDate } from "../utils/dateUtils";
 import { downloadAsCSV } from "../utils/csvUtils";
 import { AppointmentService } from "../_helpers";
 import { useQuery, useQueryClient } from "react-query";
+import { convertirEnFrancais, getBackgroundColor } from "../utils/statusStyle";
 
 const AppointmentAllList = () => {
   const downloadRef = useRef(null);
@@ -117,44 +118,6 @@ const AppointmentAllList = () => {
 
   // Render your UI with the optimized data
   // ...
-
-  function convertirEnFrancais(status) {
-    switch (status) {
-      case "pending":
-        return "En attente";
-      case "confirmed":
-        return "Confirmé";
-      case "cancelled":
-        return "Annulé";
-      case "not-interested":
-        return "Non intéressé";
-      case "to-be-reminded":
-        return "À rappeler";
-      case "longest-date":
-        return "Date éloignée";
-      default:
-        return status;
-    }
-  }
-
-  function getBackgroundColor(status) {
-    switch (status) {
-      case "pending":
-        return "text-green-900 bg-green-200";
-      case "confirmed":
-        return "text-blue-900 bg-blue-200";
-      case "cancelled":
-        return "text-red-900 bg-red-200";
-      case "not-interested":
-        return "text-gray-900 bg-gray-200";
-      case "to-be-reminded":
-        return "text-yellow-900 bg-yellow-200";
-      case "longest-date":
-        return "text-purple-900 bg-purple-200";
-      default:
-        return "";
-    }
-  }
 
   return (
     <>
@@ -299,44 +262,27 @@ const AppointmentAllList = () => {
                     {dayjs(appointment.date).format("DD/MM/YY, HH:mm")}
                   </Table.Cell>
                   <Table.Cell
-                    className="px-3 py-3 sm:px-6  overflow-auto"
-                    style={{ whiteSpace: "nowrap", maxWidth: "100px" }}
+                    className="overflow-auto"
+                    style={{ whiteSpace: "nowrap", maxWidth: "80px" }}
                   >
                     {appointment.commercial}
                   </Table.Cell>
 
-                  {/* <Table.Cell>
-                    <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                      <span
-                        aria-hidden
-                        className="absolute text-xs inset-0 bg-green-200 opacity-50 rounded-full"
-                      ></span>
-                      <span className="relative text-xs">
-                        {appointment.status}
-                      </span>
-                    </span>
-                  </Table.Cell> */}
-
                   <Table.Cell>
                     <span
-                      className={`relative inline-block px-3 py-1 font-semibold leading-tight ${getBackgroundColor(
+                      className={`relative inline-block px-3 py-1 font-semibold leading-tight rounded-full ${getBackgroundColor(
                         appointment.status
-                      )}`}
+                      )}`}  style={{ whiteSpace: "nowrap" }}
                     >
                       <span
                         aria-hidden
-                        className="absolute text-xs inset-0 opacity-50 rounded-full"
+                        className="absolute text-xs inset-0 opacity-50"
                       />
-                      <span className="relative text-xs">
-                        {convertirEnFrancais(appointment.status)}
-                      </span>
+                      {convertirEnFrancais(appointment.status)}
                     </span>
                   </Table.Cell>
 
-                  <Table.Cell
-                    // className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-flex items-center"
-                    className="fornt-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                  >
+                  <Table.Cell className="fornt-medium text-cyan-600 hover:underline dark:text-cyan-500 px-1 py-2">
                     <Link to={`../appointments/edit/${appointment._id}`}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

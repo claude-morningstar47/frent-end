@@ -1,9 +1,9 @@
 import React from "react";
 import { AppointmentWeek } from "../appointments/AppointmentWeek";
 import { FullScreen } from "../_helpers/Fullscreen";
-import SwitchPage from "../appointments/SwitchPage";
+// import SwitchPage from "../appointments/SwitchPage";
 import Clock from "../_helpers/Clock";
-import DailyOrdersTable from "../appointments/DailyOrdersTables";
+// import DailyOrdersTable from "../appointments/DailyOrdersTables";
 
 export default function ManagerPage() {
   return (
