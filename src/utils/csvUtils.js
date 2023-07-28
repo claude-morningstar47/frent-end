@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 
-
 export const downloadAsCSV = (appointments, selecteDate) => {
   const csvContent = [
     "Agent$Date$Name$Phone(fixe)$Phone(mobile)$Address$Date programmation$Commercial",

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { AppointmentService } from "../_helpers";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
-import { useWeekManager } from "../_helpers/weekManager";
+import { useWeekManager } from "../utils/dateUtils";
 import { TextInput } from "flowbite-react";
 dayjs.extend(isoWeek);
 

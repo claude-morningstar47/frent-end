@@ -1,7 +1,7 @@
 // SwitchPage.js
-import React, { useState, useEffect } from 'react';
-import {AppointmentWeek} from './AppointmentWeek';
-import DailyOrdersTable from './DailyOrdersTables';
+import React, { useState, useEffect } from "react";
+import { AppointmentWeek } from "../appointments/AppointmentWeek";
+import DailyOrdersTable from "../appointments/DailyOrdersTables";
 
 const SwitchPage = () => {
   const [currentPage, setCurrentPage] = useState(0);

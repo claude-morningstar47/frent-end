@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { AppointmentService } from "../_helpers";
 import { alertActions } from "../_store";
 import { useQueryClient } from "react-query";
-import { useWeekManager } from "../_helpers/weekManager";
+import { useWeekManager } from "../utils/dateUtils";
 
 export const AppointmentAdd = ({ closeModal }) => {
   const dispatch = useDispatch();
