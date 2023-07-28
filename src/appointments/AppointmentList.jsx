@@ -16,10 +16,10 @@ export const AppointmentList = ({ refreshList }) => {
   // Redux
   const authUser = useSelector((state) => state.auth?.user);
   const userId = authUser?.id;
-  
+
   // Query appointments
   const queryClient = useQueryClient();
-  
+
   // Fetch appointments
   const { data, isLoading, isError, error } = useQuery(
     ["appointmentByUserId", userId, selectedDate, page, limit],
@@ -37,7 +37,11 @@ export const AppointmentList = ({ refreshList }) => {
 
   useEffect(() => {
     if (isError && error.response && error.response.status === 201) {
-      queryClient.invalidateQueries(["appointmentByUserId", userId, selectedDate]);
+      queryClient.invalidateQueries([
+        "appointmentByUserId",
+        userId,
+        selectedDate,
+      ]);
     }
   }, [isError, error, queryClient, userId, selectedDate, refreshList]);
 
@@ -56,6 +60,44 @@ export const AppointmentList = ({ refreshList }) => {
     const newDate = event.target.value;
     setSelectedDate(newDate);
   };
+
+  function convertirEnFrancais(status) {
+    switch (status) {
+      case "pending":
+        return "En attente";
+      case "confirmed":
+        return "Confirmé";
+      case "cancelled":
+        return "Annulé";
+      case "not-interested":
+        return "Non intéressé";
+      case "to-be-reminded":
+        return "À rappeler";
+      case "longest-date":
+        return "Date éloignée";
+      default:
+        return status;
+    }
+  }
+
+  function getBackgroundColor(status) {
+    switch (status) {
+      case "pending":
+        return "text-green-900 bg-green-200";
+      case "confirmed":
+        return "text-blue-900 bg-blue-200";
+      case "cancelled":
+        return "text-red-900 bg-red-200";
+      case "not-interested":
+        return "text-gray-900 bg-gray-200";
+      case "to-be-reminded":
+        return "text-yellow-900 bg-yellow-200";
+      case "longest-date":
+        return "text-purple-900 bg-purple-200";
+      default:
+        return "";
+    }
+  }
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -116,13 +158,30 @@ export const AppointmentList = ({ refreshList }) => {
                 {dayjs(appointment.date).format("DD/MM/YY, HH:mm")}
               </Table.Cell>
               <Table.Cell>{appointment.commercial}</Table.Cell>
-              <Table.Cell>
+
+              {/* <Table.Cell>
                 <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                   <span
                     aria-hidden
                     className="absolute text-xs inset-0 bg-green-200 opacity-50 rounded-full"
                   ></span>
                   <span className="relative text-xs">{appointment.status}</span>
+                </span>
+              </Table.Cell> */}
+
+              <Table.Cell>
+                <span
+                  className={`relative inline-block px-3 py-1 font-semibold leading-tight ${getBackgroundColor(
+                    appointment.status
+                  )}`}
+                >
+                  <span
+                    aria-hidden
+                    className="absolute text-xs inset-0 opacity-50 rounded-full"
+                  />
+                  <span className="relative text-xs">
+                    {convertirEnFrancais(appointment.status)}
+                  </span>
                 </span>
               </Table.Cell>
             </Table.Row>

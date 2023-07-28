@@ -317,12 +317,21 @@ const AppointmentAllList = () => {
                     </span>
                   </Table.Cell> */}
 
-<Table.Cell>
-    <span className={`relative inline-block px-3 py-1 font-semibold leading-tight ${getBackgroundColor(appointment.status)}`}>
-      <span aria-hidden className="absolute text-xs inset-0 opacity-50 rounded-full" />
-      <span className="relative text-xs">{convertirEnFrancais(appointment.status)}</span>
-    </span>
-  </Table.Cell>
+                  <Table.Cell>
+                    <span
+                      className={`relative inline-block px-3 py-1 font-semibold leading-tight ${getBackgroundColor(
+                        appointment.status
+                      )}`}
+                    >
+                      <span
+                        aria-hidden
+                        className="absolute text-xs inset-0 opacity-50 rounded-full"
+                      />
+                      <span className="relative text-xs">
+                        {convertirEnFrancais(appointment.status)}
+                      </span>
+                    </span>
+                  </Table.Cell>
 
                   <Table.Cell
                     // className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-flex items-center"
