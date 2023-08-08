@@ -34,7 +34,7 @@ export default function HomePage() {
       </Modal>
 
       {/* <div> */}
-        <AppointmentList refreshList={refreshList} />
+      <AppointmentList refreshList={refreshList} />
       {/* </div> */}
     </>
   );

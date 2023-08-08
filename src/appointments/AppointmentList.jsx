@@ -6,6 +6,14 @@ import { AppointmentService } from "../_helpers";
 import dayjs from "dayjs";
 import { convertirEnFrancais, getBackgroundColor } from "../utils/statusStyle";
 
+const formatCommercialName = (name) => {
+  const words = name.split("-");
+  const formattedName = words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  return formattedName;
+};
+
 export const AppointmentList = ({ refreshList }) => {
   // State
   const currentDate = new Date();
@@ -118,9 +126,12 @@ export const AppointmentList = ({ refreshList }) => {
                 {appointment.address.toLowerCase()}
               </Table.Cell>
               <Table.Cell>
-                {dayjs(appointment.date).format("DD/MM/YY, HH:mm")}
+                {dayjs(appointment.date).format("DD/MM/YY")}, {appointment.time}
               </Table.Cell>
-              <Table.Cell>{appointment.commercial}</Table.Cell>
+              {/* <Table.Cell>{appointment.commercial}</Table.Cell> */}
+              <Table.Cell>
+                {formatCommercialName(appointment.commercial)}
+              </Table.Cell>
 
               <Table.Cell>
                 <span

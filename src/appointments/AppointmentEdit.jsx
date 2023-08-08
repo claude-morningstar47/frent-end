@@ -69,7 +69,7 @@ const AppointmentEdit = () => {
       setAppointmentData((prevState) => ({
         ...prevState,
         ...appointment,
-        date: dayjs(appointment.date).format("YYYY-MM-DDTHH:mm"),
+        date: dayjs(appointment.date).format("YYYY-MM-DD"),
       }));
     }
   }, [appointment]);
@@ -156,13 +156,13 @@ const AppointmentEdit = () => {
                 required
               >
                 <option value="">Select Sales Representative</option>
-                <option value="Annabelle Rodriguez">Annabelle Rodriguez</option>
-                <option value="Benoit Chamboissier">Benoît Chamboissier</option>
-                <option value="Freddy Tamboers">Freddy Tamboers</option>
-                <option value="Julien Morel">Julien Morel</option>
-                <option value="Théo Raymond">Théo Raymond</option>
-                <option value="Aurore Diallo">Aurore Diallo</option>
-                <option value="Simon Cadenne">Simon Cadenne</option>
+                <option value="annabelle-rodriguez">Annabelle Rodriguez</option>
+                <option value="benoit-chamboissier">Benoît Chamboissier</option>
+                <option value="freddy-tamboers">Freddy Tamboers</option>
+                <option value="julien-morel">Julien Morel</option>
+                <option value="theo-raymond">Théo Raymond</option>
+                <option value="aurore-diallo">Aurore Diallo</option>
+                <option value="simon-cadenne">Simon Cadenne</option>
               </select>
             </div>
           </div>
@@ -193,10 +193,24 @@ const AppointmentEdit = () => {
               Date
             </label>
             <input
-              type="datetime-local"
+              type="date"
               id="date"
               name="date"
               value={appointmentData.date}
+              onChange={handleInputChange}
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            />
+             <label
+              htmlFor="time"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Time
+            </label>
+            <input
+              type="time"
+              id="time"
+              name="time"
+              value={appointmentData.time}
               onChange={handleInputChange}
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             />

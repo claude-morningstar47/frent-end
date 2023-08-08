@@ -13,6 +13,16 @@ import { AppointmentService } from "../_helpers";
 import { useQuery, useQueryClient } from "react-query";
 import { convertirEnFrancais, getBackgroundColor } from "../utils/statusStyle";
 
+
+const formatCommercialName = (name) => {
+  const words = name.split("-");
+  const formattedName = words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  return formattedName;
+};
+
+
 const AppointmentAllList = () => {
   const downloadRef = useRef(null);
   const queryClient = useQueryClient();
@@ -121,8 +131,8 @@ const AppointmentAllList = () => {
 
   return (
     <>
-      {/* <div className="relative overflow-x-auto shadow-md sm:rounded-lg"> */}
-      <div>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+
         <div className="flex items-center justify-between pb-4">
           <div>
             <Button color="gray" size="xs" onClick={handleButtonClick}>
@@ -201,7 +211,7 @@ const AppointmentAllList = () => {
           </div>
         </div>
 
-        <Table hoverable className="mt-3">
+        <Table hoverable className="">
           <Table.Head>
             <Table.HeadCell>#</Table.HeadCell>
             <Table.HeadCell>Agent</Table.HeadCell>
@@ -257,13 +267,14 @@ const AppointmentAllList = () => {
                     {appointment.address.toLowerCase()}
                   </Table.Cell>
                   <Table.Cell>
-                    {dayjs(appointment.date).format("DD/MM/YY, HH:mm")}
+                    {dayjs(appointment.date).format("DD/MM/YY")}, {appointment.time}
                   </Table.Cell>
                   <Table.Cell
                     className="overflow-auto"
                     style={{ whiteSpace: "nowrap", maxWidth: "80px" }}
                   >
-                    {appointment.commercial}
+                    {formatCommercialName( appointment.commercial)}
+                    {/* { appointment.commercial} */}
                   </Table.Cell>
 
                   <Table.Cell>
@@ -302,6 +313,7 @@ const AppointmentAllList = () => {
               ))}
           </Table.Body>
         </Table>
+
         {isLoading && (
           <div className="text-center">
             <Spinner aria-label="Default status example" size="xl" />

@@ -34,9 +34,8 @@ function redirectToLogin() {
 }
 
 export const instanceHttp = axios.create({
-  baseURL: "http://192.168.100.50:5000/api",
-  // baseURL:"https://back-end-rdv.vercel.app/api/",
-  // baseURL: "http://192.168.100.22:8080/api",
+  // baseURL: "http://192.168.100.50:5000/api",
+  baseURL:"https://back-end-rdv.vercel.app/api/",
   headers: {
     "Content-Type": "application/json",
   },

@@ -1,27 +1,47 @@
 import React from "react";
-import { Button, Label, Modal, Select, Spinner, TextInput, Textarea } from "flowbite-react";
+import { Button, Label, Modal, Spinner, TextInput, Textarea } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { fr } from "date-fns/locale";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { AppointmentService } from "../_helpers";
 import { alertActions } from "../_store";
 import { useQueryClient } from "react-query";
 import { useWeekManager } from "../utils/dateUtils";
+import DatePickerDate from "./DatePickerDate";
+import DatePickerTime from "./DatePickerTime";
+import SalesRepresentativeSelect from "./SalesRepresentativeSelect";
 
-export const AppointmentAdd = ({ closeModal }) => {
+const AppointmentAdd = ({ closeModal }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const queryClient = useQueryClient();
   const { week } = useWeekManager();
 
-  const { register, handleSubmit, formState: { isSubmitting }, watch, reset } = useForm();
+  // Add validation rules for each input field
+  const { register, handleSubmit, reset, formState: { isSubmitting, errors } } = useForm({
+    defaultValues: {
+      commercial: "",
+      date: "",
+      time: "",
+      name: "",
+      phone_1: "",
+      phone_2: "",
+      address: "",
+      comment: "",
+    },
+  });
+
+  const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
 
   const onSubmit = async (data) => {
     const userId = user?.id ?? "";
 
     try {
+      data.commercial = removeAccents(
+        data.commercial.toLowerCase().replace(/\s+/g, "-")
+      );
+
       await AppointmentService.createAppointment(userId, data);
       await queryClient.invalidateQueries("appointmentByUserId");
       await queryClient.invalidateQueries(["appointmentsByWeek", week]);
@@ -56,17 +76,15 @@ export const AppointmentAdd = ({ closeModal }) => {
               >
                 Sales Representative
               </Label>
-              <Select id="commercial" {...register("commercial")} required>
-                <option value="">Select Sales Representative</option>
-                <option value="Annabelle Rodriguez">Annabelle Rodriguez</option>
-                <option value="Aurore Diallo">Aurore Diallo</option>
-                <option value="Benoît Chamboissier">Benoît Chamboissier</option>
-                <option value="Freddy Tamboers">Freddy Tamboers</option>
-                <option value="Julien Morel">Julien Morel</option>
-                <option value="Simom Cadenne">Simom Cadenne</option>
-                <option value="Théo Raymond">Théo Raymond</option>
-              </Select>
+              <SalesRepresentativeSelect register={register} />
+
+              {errors.commercial && (
+                <span className="text-red-500">
+                  {errors.commercial.message}
+                </span>
+              )}
             </div>
+
             <div className="w-full px-3 sm:w-1/2">
               <div className="mb-5">
                 <Label
@@ -75,25 +93,17 @@ export const AppointmentAdd = ({ closeModal }) => {
                 >
                   Date and Time
                 </Label>
-                <DatePicker
-                  id="date_1"
-                  className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 rounded-lg p-2.5 text-sm"
-                  isClearable
-                  showIcon
-                  selected={watch("date")}
-                  onChange={(date) => {
-                    reset({ date });
-                  }}
-                  showTimeSelect
-                  timeFormat="HH:mm"
-                  timeIntervals={30}
-                  minTime={new Date().setHours(8, 0)}
-                  maxTime={new Date().setHours(20, 0)}
-                  dateFormat="PP à p"
-                  locale={fr}
-                  autoComplete="off"
-                  required
-                />
+
+                <div className="flex space-x-2">
+                  <DatePickerDate register={register} />
+                  <DatePickerTime register={register} />
+                </div>
+                {errors.date && (
+                  <span className="text-red-500">{errors.date.message}</span>
+                )}
+                {errors.time && (
+                  <span className="text-red-500">{errors.time.message}</span>
+                )}
               </div>
             </div>
           </div>
@@ -109,11 +119,13 @@ export const AppointmentAdd = ({ closeModal }) => {
               type="text"
               name="name"
               id="name"
-              required
               autoComplete="off"
               placeholder="Full Name"
-              {...register("name")}
+              {...register("name", { required: "This field is required" })}
             />
+            {errors.name && (
+              <span className="text-red-500">{errors.name.message}</span>
+            )}
           </div>
 
           <div className="-mx-3 flex flex-wrap">
@@ -186,11 +198,7 @@ export const AppointmentAdd = ({ closeModal }) => {
 
           <Modal.Footer>
             <Button disabled={isSubmitting} type="submit">
-              {isSubmitting ? (
-                <Spinner className="Default status example" />
-              ) : (
-                "Save"
-              )}
+              {isSubmitting ? <Spinner /> : "Save"}
             </Button>
             <Button color="gray" onClick={handleCancel}>
               Cancel
@@ -201,3 +209,5 @@ export const AppointmentAdd = ({ closeModal }) => {
     </>
   );
 };
+
+export { AppointmentAdd };
