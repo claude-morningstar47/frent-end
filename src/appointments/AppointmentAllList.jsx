@@ -13,7 +13,6 @@ import { AppointmentService } from "../_helpers";
 import { useQuery, useQueryClient } from "react-query";
 import { convertirEnFrancais, getBackgroundColor } from "../utils/statusStyle";
 
-
 const formatCommercialName = (name) => {
   const words = name.split("-");
   const formattedName = words
@@ -21,7 +20,6 @@ const formatCommercialName = (name) => {
     .join(" ");
   return formattedName;
 };
-
 
 const AppointmentAllList = () => {
   const downloadRef = useRef(null);
@@ -129,10 +127,22 @@ const AppointmentAllList = () => {
   // Render your UI with the optimized data
   // ...
 
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleRowClick = (appointment) => {
+    setSelectedItem(appointment);
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setSelectedItem(null);
+    setIsPopupOpen(false);
+  };
+
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-
         <div className="flex items-center justify-between pb-4">
           <div>
             <Button color="gray" size="xs" onClick={handleButtonClick}>
@@ -216,13 +226,12 @@ const AppointmentAllList = () => {
             <Table.HeadCell>#</Table.HeadCell>
             <Table.HeadCell>Agent</Table.HeadCell>
             <Table.HeadCell>Date</Table.HeadCell>
-            <Table.HeadCell>Full Name</Table.HeadCell>
+            <Table.HeadCell>Doctor</Table.HeadCell>
             <Table.HeadCell>Phone</Table.HeadCell>
-            <Table.HeadCell>Address</Table.HeadCell>
-            <Table.HeadCell>Scheduling Date</Table.HeadCell>
+            {/* <Table.HeadCell>Address</Table.HeadCell> */}
+            <Table.HeadCell>Appointment date</Table.HeadCell>
             <Table.HeadCell>Sales Representative</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>Edit</Table.HeadCell>
           </Table.Head>
 
           <Table.Body className="divide-y">
@@ -232,6 +241,7 @@ const AppointmentAllList = () => {
                 <Table.Row
                   key={appointment._id}
                   className="bg-white text-xs dark:border-gray-700 dark:bg-gray-800"
+                  onClick={() => handleRowClick(appointment)}
                 >
                   <Table.Cell>{index + 1}</Table.Cell>
                   <Table.Cell
@@ -253,28 +263,28 @@ const AppointmentAllList = () => {
 
                   <Table.Cell
                     className="px-3 py-3 sm:px-4 overflow-auto"
-                    style={{ whiteSpace: "nowrap", maxWidth: "120px" }}
+                    // style={{ whiteSpace: "nowrap", maxWidth: "120px" }}
                   >
                     {appointment.phone_1 && appointment.phone_2
                       ? `${appointment.phone_1} / ${appointment.phone_2}`
                       : appointment.phone_1 || appointment.phone_2}
                   </Table.Cell>
 
-                  <Table.Cell
+                  {/* <Table.Cell
                     className="px-3 py-3 sm:px-6  overflow-auto"
                     style={{ whiteSpace: "nowrap", maxWidth: "120px" }}
                   >
                     {appointment.address.toLowerCase()}
-                  </Table.Cell>
+                  </Table.Cell> */}
                   <Table.Cell>
-                    {dayjs(appointment.date).format("DD/MM/YY")}, {appointment.time}
+                    {dayjs(appointment.date).format("DD/MM/YY")},{" "}
+                    {appointment.time}
                   </Table.Cell>
                   <Table.Cell
                     className="overflow-auto"
                     style={{ whiteSpace: "nowrap", maxWidth: "80px" }}
                   >
-                    {formatCommercialName( appointment.commercial)}
-                    {/* { appointment.commercial} */}
+                    {formatCommercialName(appointment.commercial)}
                   </Table.Cell>
 
                   <Table.Cell>
@@ -291,26 +301,73 @@ const AppointmentAllList = () => {
                       {convertirEnFrancais(appointment.status)}
                     </span>
                   </Table.Cell>
-
-                  <Table.Cell className="fornt-medium text-cyan-600 hover:underline dark:text-cyan-500 px-1 py-2">
-                    <Link to={`../appointments/edit/${appointment._id}`}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-2"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M14.853 3.146a.5.5 0 010 .708L7.707 12.5l-1.5 6 6-1.5 8.646-8.646a.5.5 0 01.147-.338l1.5-1.5a.5.5 0 01.708 0l1.646 1.646a.5.5 0 010 .708L15.561 4.207a.5.5 0 01-.708 0l1.5-1.5z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </Link>
-                  </Table.Cell>
                 </Table.Row>
               ))}
+
+            {isPopupOpen && selectedItem && (
+              <div
+                className={`fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 ${
+                  isPopupOpen ? "block" : "hidden"
+                }`}
+              >
+                <div className="bg-white p-4 rounded shadow-md">
+                  <p className="mb-2 text-lg font-semibold">
+                    Options pour l'élément sélectionné :
+                  </p>
+                  <p>
+                    <span className="font-semibold">Agent:</span>{" "}
+                    {selectedItem && selectedItem.userId?.firstName}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Docteur:</span>{" "}
+                    {selectedItem && selectedItem.name.toUpperCase()}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Date programmation:</span>{" "}
+                    {selectedItem &&  dayjs(selectedItem.date).format("DD/MM/YY")}, {selectedItem && selectedItem.time}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Phone:</span>{" "}
+                    {selectedItem && selectedItem.phone_1 && selectedItem.phone_2
+                      ? `${selectedItem.phone_1} / ${selectedItem.phone_2}`
+                      : selectedItem.phone_1 || selectedItem.phone_2}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Status:</span>{" "}
+                    {selectedItem && selectedItem.status}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Commercial:</span>{" "}
+                    {selectedItem && selectedItem.commercial}
+                  </p>
+
+                  <p>
+                    <span className="font-semibold">Address:</span>{" "}
+                    {selectedItem && selectedItem.address.toLowerCase()}
+                  </p>
+                  <p  > 
+                    <span className="font-semibold">Commentaire:</span>{" "}
+                    {selectedItem && selectedItem.comment.toLowerCase()}
+                  </p>
+                 
+
+                  <div className="mt-4 flex justify-end">
+                      <Link to={`../appointments/edit/${selectedItem._id}`}
+                      className="mr-2 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+                      >
+                      Éditer
+                      </Link>
+
+                    <button
+                      className="px-4 py-2 text-gray-600 rounded hover:bg-gray-100"
+                      onClick={() => handleClosePopup()}
+                    >
+                      Fermer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </Table.Body>
         </Table>
 
