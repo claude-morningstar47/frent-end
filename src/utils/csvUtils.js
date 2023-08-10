@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 
 export const downloadAsCSV = (appointments, selecteDate) => {
   const csvContent = [
-    "Agent$Date$Name$Phone(fixe)$Phone(mobile)$Address$Date programmation$Time programmation$Commercial",
+    "Agent$Date$Name$Phone(fixe)$Phone(mobile)$Address$Date programmation$Time programmation$Commercial$Status",
     ...(appointments?.docs || []).map((item) => {
       const agent = item.userId?.firstName;
       return [
@@ -15,6 +15,7 @@ export const downloadAsCSV = (appointments, selecteDate) => {
         dayjs(item.date).format("DD/MM/YY"),
         item.time,
         item.commercial,
+        item.status
       ].join("$");
     }),
   ].join("\n");

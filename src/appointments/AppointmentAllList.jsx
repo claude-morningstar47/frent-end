@@ -320,17 +320,19 @@ const AppointmentAllList = () => {
                   </p>
                   <p>
                     <span className="font-semibold">Docteur:</span>{" "}
-                    {selectedItem && selectedItem.name.toUpperCase()}
+                    {selectedItem && selectedItem.name?.toUpperCase()}
                   </p>
                   <p>
                     <span className="font-semibold">Date programmation:</span>{" "}
                     {selectedItem &&  dayjs(selectedItem.date).format("DD/MM/YY")}, {selectedItem && selectedItem.time}
                   </p>
                   <p>
-                    <span className="font-semibold">Phone:</span>{" "}
-                    {selectedItem && selectedItem.phone_1 && selectedItem.phone_2
-                      ? `${selectedItem.phone_1} / ${selectedItem.phone_2}`
-                      : selectedItem.phone_1 || selectedItem.phone_2}
+                    <span className="font-semibold">Fixe:</span>{" "}
+                    {selectedItem && selectedItem.phone_1 }
+                  </p>
+                  <p>
+                    <span className="font-semibold">Mobile:</span>{" "}
+                    {selectedItem && selectedItem.phone_2 }
                   </p>
                   <p>
                     <span className="font-semibold">Status:</span>{" "}
@@ -343,11 +345,11 @@ const AppointmentAllList = () => {
 
                   <p>
                     <span className="font-semibold">Address:</span>{" "}
-                    {selectedItem && selectedItem.address.toLowerCase()}
+                    {selectedItem && selectedItem.address?.toLowerCase()}
                   </p>
                   <p  > 
                     <span className="font-semibold">Commentaire:</span>{" "}
-                    {selectedItem && selectedItem.comment.toLowerCase()}
+                    {selectedItem && selectedItem.comment?.toLowerCase()}
                   </p>
                  
 
