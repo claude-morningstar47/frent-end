@@ -10,11 +10,13 @@ const DatePickerTime = ({ register }) => {
   // Générer les horaires avec un intervalle de 30 minutes
   const timeOptions = [];
   let currentTime = startTime;
+  
   while (currentTime <= endTime) {
     const timeStr = currentTime.toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
     });
+
     timeOptions.push(
       <option key={timeStr} value={timeStr}>
         {timeStr}
