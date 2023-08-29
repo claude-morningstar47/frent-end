@@ -14,7 +14,7 @@ export default function DefaultFooter() {
         year={2023}
       />
       <Footer.LinkGroup>
-        <Footer.Link href="#">
+        <Footer.Link href="/about">
           About
         </Footer.Link>
         <Footer.Link href="#">

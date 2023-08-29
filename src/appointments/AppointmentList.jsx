@@ -17,10 +17,11 @@ const formatCommercialName = (name) => {
 export const AppointmentList = ({ refreshList }) => {
   // State
   const currentDate = new Date();
-  const formattedDate = dayjs(currentDate).format("YYYY-MM-DD");
+  const formattedDate = dayjs(currentDate).format("YYYY-MM");
   const [selectedDate, setSelectedDate] = useState(formattedDate);
+  
   const page = 1;
-  const limit = 10;
+  const limit = 100;
 
   // Redux
   const authUser = useSelector((state) => state.auth?.user);
@@ -72,15 +73,18 @@ export const AppointmentList = ({ refreshList }) => {
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+
       <div className="flex items-center justify-between pb-4">
         <TextInput
           className=" p-1 pl-10 text-sm text-gray-900 w-80 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          type="date"
+          type="month"
           min="2023-01"
           value={selectedDate}
           onChange={handleDateChange}
         />
       </div>
+
+      
       <Table hoverable>
         <Table.Head>
           <Table.HeadCell>#</Table.HeadCell>

@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
-import { DateRangePicker } from "react-date-range";
+import { DateRangePicker } from "react-date-range"; 
 import { formatSelectedDate } from "../utils/dateUtils";
 import { downloadAsCSV } from "../utils/csvUtils";
 import { AppointmentService } from "../_helpers";
