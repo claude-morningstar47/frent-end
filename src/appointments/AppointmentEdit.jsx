@@ -158,64 +158,65 @@ const AppointmentEdit = () => {
                 <option value="">Select Sales Representative</option>
                 <option value="annabelle-rodriguez">Annabelle Rodriguez</option>
                 <option value="benoit-chamboissier">Benoît Chamboissier</option>
+                <option value="fatima-sabri">Fatima Sabri</option>
                 <option value="freddy-tamboers">Freddy Tamboers</option>
                 <option value="julien-morel">Julien Morel</option>
                 <option value="theo-raymond">Théo Raymond</option>
                 <option value="aurore-diallo">Aurore Diallo</option>
+                <option value="mathieu-renault">Mathieu Renault</option>
                 <option value="simon-cadenne">Simon Cadenne</option>
                 <option value="sophie-rousmans">Sophie Rousmans</option>
               </select>
             </div>
           </div>
           <div className="grid grid-cols-6 gap-6">
+            <div className="col-span-6 sm:col-span-3">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={appointmentData.name}
+                onChange={handleInputChange}
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              />
+            </div>
 
-          <div className="col-span-6 sm:col-span-3">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={appointmentData.name}
-              onChange={handleInputChange}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            />
-          </div>
-
-          <div className="col-span-6 sm:col-span-3">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Date
-            </label>
-            <input
-              type="date"
-              id="date"
-              name="date"
-              value={appointmentData.date}
-              onChange={handleInputChange}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            />
-             <label
-              htmlFor="time"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Time
-            </label>
-            <input
-              type="time"
-              id="time"
-              name="time"
-              value={appointmentData.time}
-              onChange={handleInputChange}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            />
-          </div>
+            <div className="col-span-6 sm:col-span-3">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Date
+              </label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={appointmentData.date}
+                onChange={handleInputChange}
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              />
+              <label
+                htmlFor="time"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Time
+              </label>
+              <input
+                type="time"
+                id="time"
+                name="time"
+                value={appointmentData.time}
+                onChange={handleInputChange}
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-6 gap-6">
