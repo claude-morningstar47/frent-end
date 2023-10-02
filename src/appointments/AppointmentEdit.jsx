@@ -158,7 +158,7 @@ const AppointmentEdit = () => {
                 <option value="">Select Sales Representative</option>
                 <option value="annabelle-rodriguez">Annabelle Rodriguez</option>
                 <option value="benoit-chamboissier">Benoît Chamboissier</option>
-                <option value="fatima-sabri">Fatima Sabri</option>
+                <option value="fatima-Jabri">Fatima Jabri</option>
                 <option value="freddy-tamboers">Freddy Tamboers</option>
                 <option value="julien-morel">Julien Morel</option>
                 <option value="theo-raymond">Théo Raymond</option>

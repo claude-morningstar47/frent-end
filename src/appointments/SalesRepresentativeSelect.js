@@ -7,7 +7,7 @@ const SalesRepresentativeSelect = ({ register }) => {
     "Annabelle Rodriguez",
     "Aurore Diallo",
     "Benoît Chamboissier",
-    "Fatima Sabri",
+    "Fatima Jabri",
     "Freddy Tamboers",
     "Julien Morel",
     "Mathieu Renault",
