@@ -6,9 +6,9 @@ import { _store, authActions } from "../_store";
 const encryptionKey = '969262841ebd74718661d32cee2d6ee65d912010a8d4a53365cdf0496ebe4ea1';
 
 function getLocalTokenData() {
-  const encryptedAuthToken = Cookies.get("encryptedAuthToken");
   
-  //const encryptedAuthToken = localStorage.getItem("encryptedAuthToken");
+  const encryptedAuthToken = localStorage.getItem("encryptedAuthToken");
+  
   if (encryptedAuthToken) {
 
     const decryptedAuthToken = CryptoJS.AES.decrypt(encryptedAuthToken,
