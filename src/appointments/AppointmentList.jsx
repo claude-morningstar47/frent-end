@@ -127,7 +127,7 @@ export const AppointmentList = ({ refreshList }) => {
                 className="px-3 py-3 sm:px-6  overflow-auto"
                 style={{ whiteSpace: "nowrap", maxWidth: "120px" }}
               >
-                {appointment.address.toLowerCase()}
+                {appointment.address}
               </Table.Cell>
               <Table.Cell>
               {{dayjs(appointment.date).isValid() ?  dayjs(appointment.date).format("DD/MM/YY"): appointment.date}}, {appointment.time}
