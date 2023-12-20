@@ -130,7 +130,7 @@ export const AppointmentList = ({ refreshList }) => {
                 {appointment.address.toLowerCase()}
               </Table.Cell>
               <Table.Cell>
-                {dayjs(appointment.date).format("DD/MM/YY")}, {appointment.time}
+              {{dayjs(appointment.date).isValid() ?  dayjs(appointment.date).format("DD/MM/YY"): appointment.date}}, {appointment.time}
               </Table.Cell>
               {/* <Table.Cell>{appointment.commercial}</Table.Cell> */}
               <Table.Cell>
