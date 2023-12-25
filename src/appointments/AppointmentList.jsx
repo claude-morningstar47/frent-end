@@ -19,7 +19,7 @@ export const AppointmentList = ({ refreshList }) => {
   const currentDate = new Date();
   const formattedDate = dayjs(currentDate).format("YYYY-MM");
   const [selectedDate, setSelectedDate] = useState(formattedDate);
-  
+
   const page = 1;
   const limit = 100;
 
@@ -84,7 +84,7 @@ export const AppointmentList = ({ refreshList }) => {
         />
       </div>
 
-      
+
       <Table hoverable>
         <Table.Head>
           <Table.HeadCell>#</Table.HeadCell>
@@ -130,7 +130,7 @@ export const AppointmentList = ({ refreshList }) => {
                 {appointment.address.toLowerCase()}
               </Table.Cell>
               <Table.Cell>
-              {{dayjs(appointment.date).isValid() ?  dayjs(appointment.date).format("DD/MM/YY"): appointment.date}}, {appointment.time}
+                {dayjs(appointment.date).format("DD/MM/YY")}, {appointment.time}
               </Table.Cell>
               {/* <Table.Cell>{appointment.commercial}</Table.Cell> */}
               <Table.Cell>
