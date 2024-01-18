@@ -9,6 +9,7 @@ const SalesRepresentativeSelect = ({ register }) => {
     "Benoît Chamboissier",
     "Fatima Jabri",
     "Freddy Tamboers",
+    "Julien Camilleri",
     "Julien Morel",
     "Mathieu Renault",
     "Simon Cadenne",

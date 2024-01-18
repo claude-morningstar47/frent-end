@@ -160,6 +160,7 @@ const AppointmentEdit = () => {
                 <option value="benoit-chamboissier">Benoît Chamboissier</option>
                 <option value="fatima-Jabri">Fatima Jabri</option>
                 <option value="freddy-tamboers">Freddy Tamboers</option>
+                <option value="julien-camilleri">Julien Camilleri</option>
                 <option value="julien-morel">Julien Morel</option>
                 <option value="theo-raymond">Théo Raymond</option>
                 <option value="aurore-diallo">Aurore Diallo</option>
