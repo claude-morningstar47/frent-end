@@ -9,13 +9,20 @@ const SalesRepresentativeSelect = ({ register }) => {
     "Benoît Chamboissier",
     "Fatima Jabri",
     "Freddy Tamboers",
+    "Helene Jehamo",
+    "Julien Hendrickx",
     "Julien Camilleri",
     "Julien Morel",
-    "Kanime Nobile",
+    "Loris Miran",
+    "Karine Nobile",
+    "Malcom Pichaud",
     "Mathieu Renault",
+    "Manuel Romero",
+    "Murphy Verger",
     "Simon Cadenne",
     "Sophie Rousmans",
     "Théo Raymond",
+    "Vincen Le Mauff",
   ];
 
   return (
