@@ -163,13 +163,13 @@ const AppointmentEdit = () => {
                 <option value="julien-camilleri">Julien Camilleri</option>
                 <option value="julien-morel">Julien Morel</option>
                 <option value="karine-nobile">Kanime Nobile</option>
-                <option value="helene-jehamo">Kanime Nobile</option>
-                <option value="murphy-verger">Kanime Nobile</option>
-                <option value="manuel-romero">Kanime Nobile</option>
-                <option value="loris-miran">Kanime Nobile</option>
-                <option value="vincent-le-mauff">Kanime Nobile</option>
-                <option value="julien-hendrickx">Kanime Nobile</option>
-                <option value="malcom-pichaud">Kanime Nobile</option>
+                <option value="helene-jehamo">Helene Jehamo</option>
+                <option value="murphy-verger">Murphy Verger</option>
+                <option value="manuel-romero">Manuel Romero</option>
+                <option value="loris-miran">Loris Miran</option>
+                <option value="vincent-le-mauff">Vincent Le Mauff</option>
+                <option value="julien-hendrickx">Julien hendrickx</option>
+                <option value="malcom-pichaud">Malcom Pichaud</option>
 
                 <option value="theo-raymond">Théo Raymond</option>
                 <option value="aurore-diallo">Aurore Diallo</option>
