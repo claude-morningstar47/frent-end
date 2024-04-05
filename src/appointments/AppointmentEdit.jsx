@@ -176,7 +176,7 @@ const AppointmentEdit = () => {
                 <option value="mathieu-renault">Mathieu Renault</option>
                 <option value="simon-cadenne">Simon Cadenne</option>
                 <option value="sophie-rousmans">Sophie Rousmans</option>
-                <option value="sophie-portail">Sophie Portail</option>
+                <option value="sophie-portal">Sophie Portal</option>
 
               </select>
             </div>
