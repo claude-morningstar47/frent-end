@@ -20,6 +20,8 @@ const SalesRepresentativeSelect = ({ register }) => {
     "Manuel Romero",
     "Murphy Verger",
     "Simon Cadenne",
+    "Simon Ley",
+    "Sylvie Delon",
     "Sophie Portal",
     "Sophie Rousmans",
     "Théo Raymond",
