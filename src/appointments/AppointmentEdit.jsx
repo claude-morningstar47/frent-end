@@ -170,10 +170,10 @@ const AppointmentEdit = () => {
                 <option value="vincent-le-mauff">Vincent Le Mauff</option>
                 <option value="julien-hendrickx">Julien hendrickx</option>
                 <option value="malcom-pichaud">Malcom Pichaud</option>
-
                 <option value="theo-raymond">Théo Raymond</option>
                 <option value="aurore-diallo">Aurore Diallo</option>
                 <option value="mathieu-renault">Mathieu Renault</option>
+                <option value="romuald-vandenbussche">Romuald Vandenbussche</option>
                 <option value="simon-cadenne">Simon Cadenne</option>
                 <option value="simon-ley">Simon Ley</option>
                 <option value="sophie-rousmans">Sophie Rousmans</option>
